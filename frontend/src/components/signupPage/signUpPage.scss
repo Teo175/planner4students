@@ -1,0 +1,168 @@
+/* Overall container to center the form */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f7fc; /* Light background color */
+    padding: 20px;
+    box-sizing: border-box;
+  
+    .combobox{
+        border: 1px solid #ccc;
+        border-radius:6px;
+        padding:2px;
+        height: 44px;
+    }
+    .signup-form {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+      text-align: left;
+
+      .selection-container {
+        display: flex; /* Use flexbox to align the ComboBoxes horizontally */
+        justify-content: space-between; /* Distribute space evenly between comboboxes */
+        gap: 10px; /* Add some space between the ComboBoxes */
+        margin-top: 20px; /* Add some margin to separate from the previous rows */
+      }
+    }
+  
+    .signup-form p:first-of-type {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .signup-form p:last-of-type {
+        text-align: center;
+        margin-top:30px;
+    }
+
+    .signup-form p {
+      font-size: 1rem;
+      color: #555;
+      margin-top: 10px;
+      align-items: center;
+    }
+  
+    /* Flexbox layout for each row of fields */
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px; 
+    }
+  
+    /* Field container settings */
+    .field-container {
+      flex: 1 1 45%; /* Take 45% width per field on the row */
+      min-width: 220px; /* Ensure that fields don't shrink too much */
+      margin-bottom: 15px;
+    }
+  
+    /* Input fields style */
+    .signup-form .field-container input {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    .signup-form input::placeholder {
+        color: #888; /* Light gray color for placeholder */
+      }
+  
+    /* Focus effect for input fields */
+    .signup-form .field-container input:focus {
+      border-color: #0078d4;
+    }
+  
+    /* ComboBox styling */
+    .signup-form .field-container .ms-ComboBox {
+      width: 100%;
+      margin-top: 5px;
+      font-size: 1rem;
+    }
+  
+    /* Button styling */
+    .signup-form button {
+      background-color: #0078d4;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      margin-top: 20px;
+    }
+      
+    .signup-form button:hover {
+      background-color: #005a8e;
+    }
+  
+    /* Styling for the links */
+    .signup-form a {
+      color: #0078d4;
+      font-weight: 600;
+      text-decoration: none;
+    }
+  
+    .signup-form a:hover {
+      text-decoration: underline;
+    }
+  
+    /* Styling for selection-container to display comboboxes in a row */
+
+
+    /* Small responsiveness for mobile screens */
+    @media (max-width: 600px) {
+      .signup-form {
+        padding: 20px;
+        width: 100%;
+      }
+  
+      .signup-form p {
+        font-size: 1.4rem;
+      }
+  
+      .signup-form button {
+        font-size: 1rem;
+        padding: 10px;
+      }
+  
+      /* Adjust form-row layout for smaller screens */
+      .form-row {
+        flex-direction: column;
+      }
+  
+      .field-container {
+        flex: 1 1 100%; /* Stack the fields vertically on smaller screens */
+      }
+    }
+  }
+  
+.fui-Listbox {
+    background-color: white !important; 
+    border-radius: 6px !important;
+    border: 1px solid #ccc;       
+
+}
+.fui-Option {
+    background-color: white !important;  
+    color: black !important;    
+    padding: 10px !important;   
+        
+}
+
+.fui-Option:hover {
+    background-color: #0078d4 !important;  
+    color: white !important;
+}

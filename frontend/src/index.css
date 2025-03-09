@@ -1,0 +1,200 @@
+/*Variables*/
+:root {
+  /*Colors*/
+  /*l-light m-medium d-dark*/
+  --l_pink: #ffadd9;
+  --m_pink: #ff47ab;
+  --d_pink: #e2007a;
+  --l_l_blue: #cceeff;
+  --l_m_blue: #99ddff;
+  --l_d_blue: #80d5ff;
+  --l_blue: #5cafff;
+  --m_blue: #007df5;
+  --d_blue: #004a91;
+  --white: #ffffff;
+  --m_gray: #a4a6a7;
+  --d_gray: #585a5b;
+  --red: #ff0000;
+  --whitesmoke: whitesmoke;
+  --yellow: #ffff00;
+
+  /*margins*/
+  --margin-none: 0rem;
+  --margin-xxs: 0.25rem;
+  --margin-xs: 0.5rem;
+  --margin-s: 0.7rem;
+  --margin-m: 1.2rem;
+  --margin-l: 2rem;
+  --margin-xl: 5rem;
+  --margin-xxl: 8rem;
+
+  /*padding*/
+  --padding-none: 0rem;
+  --padding-xxs: 0.25rem;
+  --padding-xs: 0.5rem;
+  --padding-s: 0.7rem;
+  --padding-m: 0.9rem;
+  --padding-l: 1.2rem;
+  --padding-xl: 1.5rem;
+  --padding-xxl: 1.8rem;
+
+  --small_dropdown_size: 9%;
+  --medium_dropdown_size: 11%;
+  --large_dropdown_size: 15%;
+
+  /*border-radius*/
+  --border-radius-xxxs: 0.25rem;
+  --border-radius-xxs: 0.5rem;
+  --border-radius-xs: 1rem;
+  --border-radius-s: 2rem;
+
+  /*border*/
+  --border_xs: 1px;
+  --border_s: 2px;
+  --border_m: 4px;
+  --border_l: 10px;
+  --border_xl: 15px;
+
+  /*font-size*/
+  --font-xxs: 0.5rem;
+  --font-s: 0.9rem;
+  --font-m: 1.2rem;
+  --font-l: 1.5rem;
+  --font-xl: 2rem;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+
+has context menu html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  font-size: 100%;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: flex;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+html,
+body {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+* {
+  font-family: "Roboto", sans-serif;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
