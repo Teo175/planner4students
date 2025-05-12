@@ -1,0 +1,23 @@
+import React from 'react';
+import './eventDialog.scss';
+import DayView from '../views/dayView/dayView';
+
+const EventDialog = ({ isOpen, onClose, date, courses }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="event-dialog-overlay">
+      <div className="event-dialog-content">
+        <div className="event-dialog-header">
+          <h3>Program pentru {date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</h3>
+          <button className="event-dialog-close-btn" onClick={onClose}>×</button>
+        </div>
+        <div className="event-dialog-body">
+          <DayView currentDate={date} courses={courses} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EventDialog;

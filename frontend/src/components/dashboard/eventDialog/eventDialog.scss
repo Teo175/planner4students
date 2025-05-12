@@ -1,0 +1,92 @@
+.event-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+  
+  .event-dialog-content {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 80%;
+    max-width: 1000px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s ease-out;
+    overflow: hidden;
+  }
+  
+  .event-dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #dadce0;
+    
+    h3 {
+      margin: 0;
+      font-weight: 500;
+      color: #3c4043;
+    }
+    
+    .event-dialog-close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #5f6368;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      
+      &:hover {
+        background-color: rgba(95, 99, 104, 0.1);
+      }
+    }
+  }
+  
+  .event-dialog-body {
+    flex-grow: 1;
+    overflow: hidden;
+    
+    // Ajustări specifice pentru DayView în dialog
+    :global(.day-view) {
+      height: calc(90vh - 70px); // Ajustează înălțimea pentru dialog
+      
+      :global(.day-header) {
+        position: sticky;
+        top: 0;
+        background-color: #fff;
+        z-index: 10;
+      }
+    }
+  }
+  
+  // Animații
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { 
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to { 
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }

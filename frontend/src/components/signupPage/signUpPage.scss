@@ -14,6 +14,15 @@
         padding:2px;
         height: 44px;
     }
+    .combobox2{
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 5px;
+      height: 44px;
+      vertical-align: middle;
+      align-items: center;
+      margin-top: 5px;
+    }
     .signup-form {
       background-color: #fff;
       padding: 40px;
@@ -26,6 +35,8 @@
         justify-content: space-between; /* Distribute space evenly between comboboxes */
         gap: 10px; /* Add some space between the ComboBoxes */
         margin-top: 20px; /* Add some margin to separate from the previous rows */
+
+       
       }
     }
   
@@ -53,7 +64,7 @@
     .form-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px; 
+      gap: 10px; 
     }
   
     /* Field container settings */
