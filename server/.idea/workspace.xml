@@ -5,23 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="537c9a69-82c5-4e55-b247-485397ec562a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../flaskProject/.idea/flaskProject.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/.idea/flaskProject.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/app.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/init.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/models/user.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/repositories/user_repository.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/routes/user_routes.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flaskProject/flaskProject/services/user_service.py" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/repositories/student_repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/dashboard.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/dashboard.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/loginPage/loginPage.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/loginPage/loginPage.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/loginPage/loginPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/loginPage/loginPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/signupPage/signUpPage.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/signupPage/signUpPage.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/signupPage/signUpPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/signupPage/signUpPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/api/user_api.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/api/utils/handle_response.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/common/common_constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/common/common_constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/column_names.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/column_names.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/student.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/repositories/user_repository.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/user_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/student_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/services/user_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/student_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +39,17 @@
       </list>
     </option>
   </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -42,24 +57,55 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2qtfaVBUc6DmQ9hRTEhUPQnF19M" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/peter/Desktop/planner4students/server&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PythonContentEntriesConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "1-1-login",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/peter/Desktop/planner4students/server",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable",
+    "ts.external.directory.path": "C:\\Users\\peter\\AppData\\Local\\Programs\\PyCharm Professional\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\peter\Desktop\planner4students\server\server" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Flask" type="Python.FlaskServer" nameIsGenerated="true">
+      <module name="server" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="FLASK_APP" value="app.py FLASK_ENV=development" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Program Files\Python310\python.exe" />
+      <option name="SDK_NAME" value="Python 3.10" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -74,6 +120,21 @@
       <workItem from="1735985860462" duration="20000" />
       <workItem from="1735987173881" duration="93000" />
       <workItem from="1735987306554" duration="89000" />
+      <workItem from="1736064681407" duration="34000" />
+      <workItem from="1736064716918" duration="5016000" />
+      <workItem from="1736072351591" duration="12535000" />
+      <workItem from="1741444821582" duration="7082000" />
+      <workItem from="1741806697475" duration="715000" />
+      <workItem from="1741807635764" duration="2765000" />
+      <workItem from="1742042667107" duration="1000" />
+      <workItem from="1742281251409" duration="71000" />
+      <workItem from="1742281323663" duration="947000" />
+      <workItem from="1742552436326" duration="5000" />
+      <workItem from="1742642992924" duration="15000" />
+      <workItem from="1743933386361" duration="17380000" />
+      <workItem from="1744283674457" duration="662000" />
+      <workItem from="1744456957096" duration="72745000" />
+      <workItem from="1745660882699" duration="42461000" />
     </task>
     <servers />
   </component>
@@ -81,7 +142,16 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/server$app.coverage" NAME="app Coverage Results" MODIFIED="1735987375880" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server" />
+    <SUITE FILE_PATH="coverage/server$app.coverage" NAME="app Coverage Results" MODIFIED="1745594970223" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server" />
     <SUITE FILE_PATH="coverage/flaskProject$flaskProject.coverage" NAME="flaskProject Coverage Results" MODIFIED="1735500507635" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/server$scraper.coverage" NAME="scraper Coverage Results" MODIFIED="1744461941130" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/scraper" />
+    <SUITE FILE_PATH="coverage/server$user_routes.coverage" NAME="user_routes Coverage Results" MODIFIED="1736069130948" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/routes" />
+    <SUITE FILE_PATH="coverage/server$user.coverage" NAME="user Coverage Results" MODIFIED="1736084731418" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/models" />
+    <SUITE FILE_PATH="coverage/server$room.coverage" NAME="room Coverage Results" MODIFIED="1744558973905" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/models" />
+    <SUITE FILE_PATH="coverage/server$user_service.coverage" NAME="user_service Coverage Results" MODIFIED="1736067989698" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/services" />
+    <SUITE FILE_PATH="coverage/server$run.coverage" NAME="run Coverage Results" MODIFIED="1747028378504" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server" />
+    <SUITE FILE_PATH="coverage/server$init.coverage" NAME="init Coverage Results" MODIFIED="1736072781576" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server" />
+    <SUITE FILE_PATH="coverage/server$Flask.coverage" NAME="Flask Coverage Results" MODIFIED="1745661317891" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/server$handle_response.coverage" NAME="handle_response Coverage Results" MODIFIED="1736082407841" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/api/utils" />
   </component>
 </project>

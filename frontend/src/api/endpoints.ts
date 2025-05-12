@@ -1,0 +1,1 @@
+export const GET_USER_BY_EMAIL_ENDPOINT = (email: string) => `/users/${email}`;
