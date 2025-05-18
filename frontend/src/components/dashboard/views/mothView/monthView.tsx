@@ -137,6 +137,7 @@ const MonthView = ({ currentDate, courses, academicSchedule }) => {
         onClose={() => setDialogOpen(false)}
         date={selectedDate}
         courses={courses}
+        academicSchedule={academicSchedule}
       />
     </div>
   );

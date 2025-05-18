@@ -66,8 +66,8 @@ def update_db(session):
         logger.info(f"Baza de date a fost actualizată deoarece astăzi ({today}) este începutul unui semestru.")
     else:
         logger.info(f"Nu este necesară actualizarea bazei de date astăzi ({today}).")
+
 def repopulate_structure_of_year_db(session):
-    def repopulate_structure_of_year_db(session):
         '''
         Aceasta functie se va apela pentru actualizarea intregii bd, structura-an scolar,ore,cursuri in functie de perioada de an.
         In prima zi din sem1 se apeleaza si in prima zi din sem2

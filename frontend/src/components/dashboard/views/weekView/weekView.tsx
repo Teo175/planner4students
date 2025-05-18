@@ -11,10 +11,11 @@ import {
 import EventItem from '../../utils/eventItem';
 import './weekView.scss';
 
-const WeekView = ({ currentDate, courses, isEditMode, onDeleteCourse, academicSchedule }) => {
+const WeekView = ({ currentDate, courses, isEditMode, onDeleteCourse, academicSchedule, possibleAddCourses = [],
+  isAddingCourses = false,  onAddCourse }) => {
   const weekDays = getWeekDays(currentDate);
   const hours = Array.from({ length: 24 }, (_, i) => i); // Afișează toate orele de la 0 la 23
-  
+
   // Folosim un ref pentru a controla scrollarea
   const weekViewRef = useRef(null);
   const weekBodyRef = useRef(null);
@@ -59,7 +60,7 @@ const WeekView = ({ currentDate, courses, isEditMode, onDeleteCourse, academicSc
         })}
       </div>
       
-      <div ref={weekBodyRef} className="week-body">
+       <div ref={weekBodyRef} className="week-body">
         {hours.map((hour, hourIndex) => (
           <div key={hourIndex} className="hour-row">
             <div className="time-cell">
@@ -73,10 +74,19 @@ const WeekView = ({ currentDate, courses, isEditMode, onDeleteCourse, academicSc
               
               // Obține evenimentele pentru această zi și le aranjează pentru suprapuneri
               let dayEvents = getEventsForDate(date, courses, academicSchedule);
-              dayEvents = arrangeOverlappingEvents(dayEvents, hours[0]);
+              
+              // Adaugă și posibilele cursuri dacă suntem în modul de adăugare
+              let possibleDayEvents = [];
+              if (isAddingCourses && possibleAddCourses.length > 0) {
+                possibleDayEvents = getEventsForDate(date, possibleAddCourses, academicSchedule);
+              }
+              
+              // Aranjează toate evenimentele
+              const allDayEvents = [...dayEvents, ...possibleDayEvents];
+              const arrangedEvents = arrangeOverlappingEvents(allDayEvents, hours[0]);
               
               // Filtrăm evenimentele care încep în ora curentă
-              const hourEvents = dayEvents.filter(event => 
+              const hourEvents = arrangedEvents.filter(event => 
                 parseInt(event.startHour) === hour
               );
               
@@ -95,6 +105,9 @@ const WeekView = ({ currentDate, courses, isEditMode, onDeleteCourse, academicSc
                     // Asigură-te că durata este cel puțin 0.5 pentru vizibilitate
                     const validDuration = Math.max(0.5, durationHours);
                     
+                    // Verifică dacă acest eveniment este din possibleAddCourses
+                    const isPossibleAddEvent = isAddingCourses && possibleAddCourses.some(c => c.id === event.id);
+                    
                     return (
                       <EventItem 
                         key={eventIndex}
@@ -106,6 +119,8 @@ const WeekView = ({ currentDate, courses, isEditMode, onDeleteCourse, academicSc
                         column={event.column || 0}
                         isEditMode={isEditMode}
                         onDeleteCourse={onDeleteCourse}
+                        isPossibleAdd={isPossibleAddEvent}
+                        onAddCourse={onAddCourse}
                       />
                     );
                   })}

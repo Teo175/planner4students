@@ -1,10 +1,12 @@
 from typing import Iterable
 
 from sqlalchemy import func, and_, UUID
+from sqlalchemy.orm import joinedload
 
 from server.models.course import Course
 from server.models.group import Group
 from server.models.professor import Professor
+from server.models.room import Room
 from server.models.specialization import Specialization
 from server.models.student import Student
 from server.models.student_courses import StudentCourses
@@ -53,10 +55,20 @@ class StudentCoursesRepository:
 
             # Adaugă noile înregistrări
             for course in new_courses:
-                print(course)
+                # Determină course_id în funcție de tipul obiectului
+                if hasattr(course, 'course_id'):
+                    # Este un obiect Course
+                    course_id = course.course_id
+                elif isinstance(course, dict) and 'course_id' in course:
+                    # Este un dicționar
+                    course_id = course['course_id']
+                else:
+                    print(f"Formatul cursului nu este recunoscut: {course}")
+                    continue
+
                 student_course = StudentCourses(
                     student_id=student_id,
-                    course_id=course['course_id']
+                    course_id=course_id
                 )
                 self.session.add(student_course)
 
@@ -80,4 +92,8 @@ class StudentCoursesRepository:
         return self.session.query(Course) \
             .join(StudentCourses, StudentCourses.course_id == Course.course_id) \
             .filter(StudentCourses.student_id == student_id) \
+            .options(
+            joinedload(Course.room),
+            joinedload(Course.professor)  # Adăugăm încărcarea eager pentru profesor
+        ) \
             .all()

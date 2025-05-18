@@ -21,6 +21,14 @@ class StudentRepository:
         """
         return self.session.query(Student).filter(Student.email == email).first()
 
+    def get_student_by_id(self, id) -> Student or None:
+        """
+        Retrieve a Student by their name
+        :param email: The email of the student
+        :return: student object or None if not found
+        """
+        return self.session.query(Student).filter(Student.student_id == id).first()
+
     def add_student(self, new_student:Student) -> Student or None:
         """
         Adds a new Student in the system

@@ -20,9 +20,9 @@ const CalendarToolbar = ({
     if (viewType === 'month') {
       return `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
     } else if (viewType === 'week') {
-      return 'Săptămâna';
+      return `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()} `;
     } else if (viewType === 'day') {
-      return `${currentDate.getDate()} ${monthNames[currentDate.getMonth()]}`;
+      return `${currentDate.getDate()} ${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
     }
   };
 

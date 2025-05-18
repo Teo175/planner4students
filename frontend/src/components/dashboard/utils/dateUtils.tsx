@@ -19,8 +19,18 @@ export const reverseMapping = {
   'Sunday': 'Duminica'
 };
 
+/**
+ * Normalizează un text eliminând diacriticele
+ * @param {string} text - Textul de normalizat
+ * @returns {string} - Textul normalizat
+ */
+
+export const normalizeText = (text) => {
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
 export const dayNames = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
-export const fullDayNames = ['Luni', 'Marti', 'Miercuri', 'Joi', 'Vineri', 'Sambata', 'Duminica'];
+export const fullDayNames = ['Luni', 'Marți', 'Miercuri', 'Joi', 'Vineri', 'Sâmbătă', 'Duminică'];
+export const normalizedFullDayNames = fullDayNames.map(day => normalizeText(day));
 
 export const monthNames = [
   'Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie',
@@ -93,7 +103,6 @@ export const getDaysArray = (currentDate, onlyNeededWeeks = false) => {
       });
     }
   }
-  
   return daysArray;
 };
 export const getWeekDays = (currentDate) => {
@@ -155,8 +164,6 @@ export const isInAcademicPeriod = (date, academicPeriods) => {
   return false;
 };
 
-
-
 /**
  * Verifică dacă o dată este o zi liberă
  * @param {Date} date - Data de verificat
@@ -168,15 +175,15 @@ export const isHoliday = (date, holidays) => {
     return null;
   }
   
-  const dateStr = date.toISOString().split('T')[0]; // Format YYYY-MM-DD
+  // Formatăm data manual folosind data locală
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const dateStr = `${year}-${month}-${day}`;
   
   // Folosim find în loc de some pentru a returna obiectul zilei libere
-  console.log(date);
-  console.log(holidays);
   return holidays.find(holiday => holiday.holiday_date === dateStr) || null;
 };
-
-
 /**
  * Obține data de început a semestrului din perioadele academice
  * @param {Array} academicPeriods - Lista de perioade academice
@@ -202,31 +209,130 @@ export const getSemesterStartDate = (academicPeriods, semesterNumber) => {
 };
 
 /**
- * Calculează paritatea săptămânii pentru o dată specificată
+ * Calculează numărul săptămânii continuu între perioadele academice
  * @param {Date} date - Data pentru care se calculează
- * @param {Date} semesterStartDate - Data de început a semestrului
- * @returns {Number} - 1 pentru săptămâni impare, 2 pentru săptămâni pare
+ * @param {Array} academicPeriods - Lista de perioade academice
+ * @returns {Object} - Obiect care conține perioada academică și numărul săptămânii
  */
-export const calculateWeekParity = (date, semesterStartDate) => {
-  if (!date || !semesterStartDate) {
-    return 0;
+export const calculateAcademicWeek = (date, academicPeriods) => {
+  if (!date || !academicPeriods || !Array.isArray(academicPeriods) || academicPeriods.length === 0) {
+    return { period: null, weekNumber: 0 };
   }
   
   const checkDate = new Date(date);
-  const startDate = new Date(semesterStartDate);
+  checkDate.setHours(12, 0, 0, 0);
   
-  checkDate.setHours(0, 0, 0, 0);
-  startDate.setHours(0, 0, 0, 0);
+  // Sortăm perioadele academice după data de început
+  const sortedPeriods = [...academicPeriods].sort((a, b) => 
+    new Date(a.start_date) - new Date(b.start_date)
+  );
   
-  // Calculează numărul de săptămâni de la începutul semestrului
-  const diffTime = Math.abs(checkDate - startDate);
+  // Găsim perioada academică curentă
+  let currentPeriod = null;
+  let currentPeriodIndex = -1;
+  
+  for (let i = 0; i < sortedPeriods.length; i++) {
+    const period = sortedPeriods[i];
+    const startDate = new Date(period.start_date);
+    const endDate = new Date(period.end_date);
+    
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+    
+    if (checkDate >= startDate && checkDate <= endDate) {
+      currentPeriod = period;
+      currentPeriodIndex = i;
+      break;
+    }
+  }
+  
+  if (!currentPeriod) {
+    return { period: null, weekNumber: 0 };
+  }
+  
+  // Prima perioadă din semestru
+  const firstPeriod = sortedPeriods[0];
+  const firstSemesterStart = new Date(firstPeriod.start_date);
+  firstSemesterStart.setHours(0, 0, 0, 0);
+  
+  // Numărul de săptămâni acumulate în perioadele anterioare
+  let accumulatedWeeks = 0;
+  
+  // Calculăm săptămânile acumulate din perioadele anterioare
+  for (let i = 0; i < currentPeriodIndex; i++) {
+    const prevPeriod = sortedPeriods[i];
+    const prevStart = new Date(prevPeriod.start_date);
+    const prevEnd = new Date(prevPeriod.end_date);
+    
+    // Găsim prima zi de luni a perioadei (sau ziua de început dacă e luni)
+    const startDayOfWeek = prevStart.getDay(); // 0 = Duminică, 1 = Luni, ..., 6 = Sâmbătă
+    let periodFirstMonday = new Date(prevStart);
+    
+    if (startDayOfWeek !== 1) { // Dacă nu e luni
+      if (startDayOfWeek === 0) { // Duminică
+        periodFirstMonday.setDate(prevStart.getDate() + 1);
+      } else { // Marți-Sâmbătă
+        periodFirstMonday.setDate(prevStart.getDate() - (startDayOfWeek - 1));
+      }
+    }
+    
+    // Calculăm numărul de săptămâni complete în această perioadă
+    const diffTime = prevEnd - periodFirstMonday;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const periodWeeks = Math.ceil((diffDays + 1) / 7);
+    
+    accumulatedWeeks += periodWeeks;
+  }
+  
+  // Calculăm numărul săptămânii în cadrul perioadei curente
+  const periodStartDate = new Date(currentPeriod.start_date);
+  periodStartDate.setHours(0, 0, 0, 0);
+  
+  // Găsim prima zi de luni a perioadei curente
+  const dayOfWeek = periodStartDate.getDay(); // 0 = Duminică, 1 = Luni, ..., 6 = Sâmbătă
+  let firstMonday = new Date(periodStartDate);
+  
+  if (dayOfWeek !== 1) { // Dacă nu e luni
+    if (dayOfWeek === 0) { // Duminică
+      firstMonday.setDate(periodStartDate.getDate() + 1);
+    } else { // Marți-Sâmbătă
+      firstMonday.setDate(periodStartDate.getDate() - (dayOfWeek - 1));
+    }
+  }
+  
+  // Calculăm diferența în zile între data curentă și prima zi de luni
+  const diffTime = checkDate - firstMonday;
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  const diffWeeks = Math.floor(diffDays / 7);
   
-  // Prima săptămână (0) este impară (1), următoarea e pară (2)...
-  return (diffWeeks % 2) + 1;
+  // Săptămâna în cadrul perioadei curente (indexată de la 0)
+  const currentPeriodWeek = Math.floor(diffDays / 7);
+  
+  // Numărul total al săptămânii (prima săptămână = 1)
+  const weekNumber = accumulatedWeeks + currentPeriodWeek + 1;
+  
+  return { period: currentPeriod, weekNumber };
 };
 
+/**
+ * Calculează paritatea săptămânii pentru o dată specificată în cadrul perioadelor academice
+ * @param {Date} date - Data pentru care se calculează
+ * @param {Array} academicPeriods - Lista de perioade academice
+ * @returns {Number} - 0 dacă nu este în perioadă academică, 1 pentru săptămâni impare, 2 pentru săptămâni pare
+ */
+export const calculateWeekParity = (date, academicPeriods) => {
+  if (!date || !academicPeriods || !Array.isArray(academicPeriods) || academicPeriods.length === 0) {
+    return 0;
+  }
+  
+  const { period, weekNumber } = calculateAcademicWeek(date, academicPeriods);
+  
+  if (!period) {
+    return 0; // Nu este în perioadă academică
+  }
+  
+  // Săptămâna 1 este impară (1), săptămâna 2 este pară (2), etc.
+  return (weekNumber % 2 === 1) ? 1 : 2;
+};
 export const getEventsForDate = (date, courses, academicSchedule = null) => {
   // Verifică dacă există cursuri
   if (!courses || !Array.isArray(courses) || courses.length === 0) {
@@ -237,13 +343,19 @@ export const getEventsForDate = (date, courses, academicSchedule = null) => {
   const dayIndex = date.getDay() === 0 ? 6 : date.getDay() - 1;
   const dayOfWeek = fullDayNames[dayIndex];
   
+  // Normalizare nume zi (eliminare diacritice)
+  const normalizeDay = (day) => day.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const normalizedDayOfWeek = normalizeDay(dayOfWeek);
+  
   // Dacă avem date despre structura academică, le folosim pentru filtrare avansată
   if (academicSchedule && academicSchedule.academic_periods && academicSchedule.holidays) {
-    const { academic_periods, holidays, current_semester } = academicSchedule;
+    const { academic_periods, holidays } = academicSchedule;
     
     // 1. Verifică dacă data este o zi liberă
     if (isHoliday(date, holidays)) {
-      return []; // Nu afișăm cursuri în zilele libere
+      
+      console.log(date);
+      return []; 
     }
     
     // 2. Verifică dacă data este într-o perioadă academică
@@ -251,21 +363,20 @@ export const getEventsForDate = (date, courses, academicSchedule = null) => {
       return []; // Nu afișăm cursuri în afara perioadelor academice
     }
     
-    // 3. Obține data de început a semestrului
-    const semesterStartDate = getSemesterStartDate(academic_periods, current_semester);
+    // 3. Calculează paritatea săptămânii în cadrul perioadei academice
+    const weekParity = calculateWeekParity(date, academic_periods);
     
-    if (!semesterStartDate) {
-      console.warn("Nu s-a putut determina data de început a semestrului!");
-      return [];
+    if (weekParity === 0) {
+      return []; // Nu suntem într-o perioadă academică
     }
     
-    // 4. Calculează paritatea săptămânii
-    const weekParity = calculateWeekParity(date, semesterStartDate);
-    
-    // 5. Filtrează cursurile pentru ziua și paritatea curentă
+    // 4. Filtrează cursurile pentru ziua și paritatea curentă
     return courses.filter(course => {
       // Verifică dacă cursul are loc în această zi a săptămânii
-      if (course.dayOfWeek === dayOfWeek || course.day === dayOfWeek) {
+      const courseDay = course.dayOfWeek || course.day || '';
+      const normalizedCourseDay = normalizeDay(courseDay);
+      
+      if (normalizedCourseDay === normalizedDayOfWeek) {
         // Verifică frecvența:
         // 0 = săptămânal (în fiecare săptămână)
         // 1 = săptămâni impare
@@ -291,7 +402,10 @@ export const getEventsForDate = (date, courses, academicSchedule = null) => {
     // Filter courses that occur on this day of the week
     return courses.filter(course => {
       // First check if the day matches
-      if (course.dayOfWeek === dayOfWeek || course.day === dayOfWeek) {
+      const courseDay = course.dayOfWeek || course.day || '';
+      const normalizedCourseDay = normalizeDay(courseDay);
+      
+      if (normalizedCourseDay === normalizedDayOfWeek) {
         // Check frequency:
         // 0 = weekly (every week)
         // 1 = odd weeks from start date
@@ -307,7 +421,6 @@ export const getEventsForDate = (date, courses, academicSchedule = null) => {
     });
   }
 };
-
 // src/components/Calendar/utils/eventUtils.js
 export const formatCoursesToEvents = (coursesData) => {
   if (!coursesData || !Array.isArray(coursesData)) return [];
@@ -359,6 +472,8 @@ export const formatCoursesToEvents = (coursesData) => {
       end_time: endTime,
       professorId: course.professor_id || course.professorId || '',
       roomId: course.room_id || course.roomId || '',
+      room_name: course.room_name,
+      professor_name: course.professor_name,
       frequency: frequency, // 0 = weekly, 1 = odd weeks, 2 = even weeks
       color: color,
       // These properties are needed for the calendar's event rendering

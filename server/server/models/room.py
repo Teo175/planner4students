@@ -15,7 +15,7 @@ class Room(Base):
     name = Column(RoomTableColumns.NAME.value,String(100),nullable= False)
     location = Column(RoomTableColumns.LOCATION.value,String(255))
 
-
+    courses = relationship("Course", back_populates="room")
     def __init__(self, name: str, location: str):
         super().__init__()
         self.name = name
