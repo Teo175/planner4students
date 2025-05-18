@@ -2,7 +2,7 @@ import React from 'react';
 import './eventDialog.scss';
 import DayView from '../views/dayView/dayView';
 
-const EventDialog = ({ isOpen, onClose, date, courses }) => {
+const EventDialog = ({ isOpen, onClose, date, courses, academicSchedule}) => {
   if (!isOpen) return null;
 
   return (
@@ -13,7 +13,7 @@ const EventDialog = ({ isOpen, onClose, date, courses }) => {
           <button className="event-dialog-close-btn" onClick={onClose}>×</button>
         </div>
         <div className="event-dialog-body">
-          <DayView currentDate={date} courses={courses} />
+          <DayView currentDate={date} courses={courses} academicSchedule={academicSchedule} />
         </div>
       </div>
     </div>

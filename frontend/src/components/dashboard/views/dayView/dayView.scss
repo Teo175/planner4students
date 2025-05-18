@@ -57,7 +57,7 @@ $holiday-color: #d93025; // Roșu pentru sărbători
       // Stilizare pentru numele sărbătorii
       .holiday-name {
         color: $holiday-color;
-        font-weight: 500;
+        font-weight: 700;
         font-size: 0.85rem;
         background-color: rgba($holiday-color, 0.1);
         padding: 3px 8px;
@@ -137,23 +137,21 @@ $holiday-color: #d93025; // Roșu pentru sărbători
         height: 90%;
   
         .event-title {
-          font-weight: 500;
+          font-weight: 700;
+          font-size: 14px;
           margin-bottom: 0.25rem;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
   
-        .event-time {
-          font-size: 0.7rem;
-          margin-bottom: 0.25rem;
-        }
-  
+       
         .event-type {
-          font-size: 0.7rem;
+          font-size: 11px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          color: #e5e5e5;
         }
       }
     }

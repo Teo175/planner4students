@@ -27,7 +27,7 @@ class Course(Base):
     study_year = relationship("StudyYear", back_populates="courses")
     group = relationship("Group", back_populates="courses")
     subgroup = relationship("Subgroup", back_populates="courses")
-
+    room = relationship("Room", back_populates="courses")
 
     def __init__(self, name: str, professor_id: UUID, course_type: str,
                  study_year_id: UUID = None, group_id: UUID = None,

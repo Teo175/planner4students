@@ -10,7 +10,9 @@ const EventItem = ({
   isDayView = false,
   isInDialog = false,
   isEditMode = false,
-  onDeleteCourse
+  onDeleteCourse,
+  isPossibleAdd = false,  // Adăugat prop pentru a marca un curs ce poate fi adăugat
+  onAddCourse           // Adăugat callback pentru adăugarea cursului
 }) => {
   const {
     title,
@@ -19,7 +21,10 @@ const EventItem = ({
     startHour,
     startMinute,
     endHour,
-    endMinute
+    endMinute,
+    room_name,
+    professor_name,
+    id
   } = event;
 
   // Dacă evenimentul este afișat în dialog și nu avem topPosition, duration etc.
@@ -37,7 +42,9 @@ const EventItem = ({
           </span>
         </div>
         <div className="event-title">{title}</div>
-        <div className="event-type">{courseType}</div>
+        <div className="event-type">{courseType}
+           {room_name && <div className="event-location">Sala: {room_name}</div>}
+        </div>
       </div>
     );
   }
@@ -62,18 +69,36 @@ const EventItem = ({
     styleProps.right = columnCount > 1 ? 'auto' : '0.25rem';
   }
 
-  // Adăugăm o clasă suplimentară când suntem în modul de editare
-  const eventClassName = `event ${isEditMode ? 'event-edit-mode' : ''}`;
+  // Modificăm stilurile dacă evenimentul poate fi adăugat
+  if (isPossibleAdd) {
+    styleProps.opacity = 0.7;
+    styleProps.border = '2px dashed #333';
+  }
 
-  // Funcția goală pentru butonul de ștergere
+  // Adăugăm o clasă suplimentară când suntem în modul de editare sau când este un curs ce poate fi adăugat
+  const eventClassName = `event ${isEditMode ? 'event-edit-mode' : ''} ${isPossibleAdd ? 'possible-add-event' : ''}`;
+
+  // Funcția pentru butonul de ștergere
   const handleDeleteClick = (e) => {
     e.stopPropagation(); // Prevenim propagarea evenimentului
     
-    if (onDeleteCourse && event.id) {
-      onDeleteCourse(event.id); // Apelăm funcția de ștergere cu ID-ul evenimentului
+    if (onDeleteCourse && id) {
+      onDeleteCourse(id); // Apelăm funcția de ștergere cu ID-ul evenimentului
     } else {
-      console.log("Delete clicked for event:", event.title);
+      console.log("Delete clicked for event:", title);
       console.warn("Ștergerea nu este posibilă: lipsește onDeleteCourse sau event.id");
+    }
+  };
+
+  // Funcția pentru butonul de adăugare
+  const handleAddClick = (e) => {
+    e.stopPropagation(); // Prevenim propagarea evenimentului
+    
+    if (onAddCourse && id) {
+      onAddCourse(id); // Apelăm funcția de adăugare cu ID-ul evenimentului
+    } else {
+      console.log("Add clicked for event:", title);
+      console.warn("Adăugarea nu este posibilă: lipsește onAddCourse sau event.id");
     }
   };
 
@@ -82,20 +107,39 @@ const EventItem = ({
       className={eventClassName}
       style={styleProps}
     >
-      {isEditMode && (
+      {isEditMode && !isPossibleAdd && (
         <button 
           className="event-delete-btn"
           onClick={handleDeleteClick}
+          title="Șterge cursul"
         >
           &times;
         </button>
       )}
-      <div className="event-title">{title}</div>
-      <div className="event-time">
+      
+      {isPossibleAdd && (
+        <button 
+          className="event-add-btn"
+          onClick={handleAddClick}
+          title="Adaugă cursul în orar"
+        >
+          +
+        </button>
+      )}
+      
+      <div className="event-title">{title}-{courseType}</div>
+      
+      <div className="event-type">
+            {professor_name && <div className="event-location">Prof: {professor_name}</div>}
+            
+      </div>
+      <div className="event-type">
         {`${startHour}:${String(startMinute).padStart(2, '0')} - 
         ${endHour}:${String(endMinute).padStart(2, '0')}`}
       </div>
-      <div className="event-type">{courseType}</div>
+      <div className='event-type'>
+        {room_name && <div className="event-location">Sala: {room_name}</div>}
+      </div>
     </div>
   );
 };

@@ -25,6 +25,14 @@ class StudentService:
         """
         return self.studentRepository.get_student_by_email(email)
 
+    def get_student_by_id(self, id) -> Student or None:
+        """
+        Retrieve a student by their email
+        :param email: The email of the student
+        :return: student object or None if not found
+        """
+        return self.studentRepository.get_student_by_id(id)
+
     def add_student(self, new_student: Student) -> Student or None:
         """
         Adds a new student in the system

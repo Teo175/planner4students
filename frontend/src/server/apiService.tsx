@@ -314,6 +314,53 @@ async getCoursesByStudentId(studentId: string): Promise<Course[]> {
   }
 }
 
+async getAvailableCourses(subgroup_id) {
+  try {
+    // Construiește endpoint-ul cu parametrii de căutare și tip
+    let endpoint = `filtered-courses?subgroup_id=${encodeURIComponent(subgroup_id)}`;
+    
+    // Efectuează cererea API
+    const response = await this.callApi(endpoint);
+    
+    // Verifică dacă răspunsul este valid
+    if (response && response.status === 200 && response.data) {
+      return response.data;
+    } else {
+      console.error('Răspuns invalid de la API pentru cursurile disponibile:', response);
+      return [];
+    }
+  } catch (error) {
+    console.error('Eroare la obținerea cursurilor disponibile:', error);
+    return [];
+  }
+}
+/**
+ * Obține cursurile disponibile pentru adăugare în funcție de un termen de căutare și tipul de curs
+ * @param courseName - Numele cursului selectat
+ * @param courseType - Tipul de curs (Curs, Seminar, Laborator)
+ * @returns Lista de cursuri care corespund criteriilor de căutare
+ */
+async getWantedCourses(courseName, courseType,subgroup_id) {
+  try {
+    // Construiește endpoint-ul cu parametrii de căutare și tip
+    let endpoint = `wanted-courses?name=${encodeURIComponent(courseName)}&type=${encodeURIComponent(courseType)}&subgroup_id=${encodeURIComponent(subgroup_id)}`;
+    
+    // Efectuează cererea API
+    const response = await this.callApi(endpoint);
+    
+    // Verifică dacă răspunsul este valid
+    if (response && response.status === 200 && response.data) {
+      return response.data;
+    } else {
+      console.error('Răspuns invalid de la API pentru cursurile dorite:', response);
+      return [];
+    }
+  } catch (error) {
+    console.error('Eroare la obținerea cursurilor dorite:', error);
+    return [];
+  }
+}
+
 
 /**
  * Update course subscriptions for a student
@@ -367,7 +414,37 @@ async signup(userData: {
 }): Promise<any> {
   return this.callApi('signup', 'POST', userData);
 }
-
+/**
+ * Resetează orarul unui student la versiunea inițială
+ * @param studentId - ID-ul studentului
+ * @returns Răspunsul de la API
+ */
+async resetCourseSubscriptions(studentId: string): Promise<any> {
+  // Construim endpoint-ul pentru resetarea orarului
+  const endpoint = 'reset-courses';
+  
+  // Construim payload-ul pentru request
+  const payload = {
+    student_id: studentId
+  };
+  
+  try {
+    // Facem apelul API cu metoda POST pentru resetare
+    const response = await this.callApi(endpoint, 'POST', payload);
+    
+    // Verificăm dacă apelul a fost cu succes
+    if (response.status === 200) {
+      console.log('Orarul a fost resetat cu succes');
+    } else {
+      console.error('Eroare la resetarea orarului:', response.message || 'Eroare necunoscută');
+    }
+    
+    return response;
+  } catch (error) {
+    console.error('Eroare la trimiterea datelor către server:', error);
+    throw error;
+  }
+}
 // Adaugă această metodă la clasa ApiService
 /**
  * Obține structura anului academic folosind subgroup_id din datele utilizatorului
@@ -401,6 +478,9 @@ async getAcademicSchedule(): Promise<AcademicSchedule | null> {
     console.error('Eroare la obținerea structurii anului academic:', error);
     return null;
   }
+
+
+  
 }
 
 logout() {
