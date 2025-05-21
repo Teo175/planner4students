@@ -42,19 +42,19 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-form">
-        <p>Welcome!</p>
-        <p>Sign in to continue.</p>
+        <p>Bine ai venit!</p><br></br>
+        <p>Loghează-te pentru a intra în aplicație.</p>
         <Field label="Email" className="field-container">
             <Input 
-            placeholder="johndoe@stud.ubbcluj.ro" 
+            placeholder="IonPopescu@stud.ubbcluj.ro" 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={loading}
             />
         </Field>
-        <Field label="Password">
+        <Field label="Parola">
             <Input 
-            placeholder="password"
+            placeholder="parola"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -62,11 +62,11 @@ const Login = () => {
             />
         </Field>
         <Button onClick={handleLogin} disabled={loading}>
-            {loading ? "Logging in..." : "Log in"}
+            {loading ? "Logare..." : "Loghează-te"}
         </Button>
         {error && <p className="error">{error}</p>}
 
-        <p>Don&apos;t have an account? <Link to="/signup">Sign up</Link></p>
+        <p>Nu ai cont? <Link to="/signup">Înregistrează-te</Link></p>
       </div>
     </div>
   );

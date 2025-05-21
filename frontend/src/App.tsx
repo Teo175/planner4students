@@ -3,6 +3,7 @@ import Login from "./components/loginPage/loginPage";
 import Signup from "./components/signupPage/signupPage";
 import { ProtectedRoute } from "./server/protectedRoute";
 import Schedule from "./components/dashboard/schedule/schedule";
+import EditProfile from "./components/editProfile/editProfile";
 
 
 function App() {
@@ -12,6 +13,9 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/signup" element={<Signup/>} />
+        <Route path="/editProfile" element={<ProtectedRoute>
+              <EditProfile/>
+            </ProtectedRoute>} />
         <Route 
           path="/schedule" 
           element={

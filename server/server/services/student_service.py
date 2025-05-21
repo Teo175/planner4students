@@ -16,6 +16,8 @@ class StudentService:
         self.studentRepository = StudentRepository(session)
         self.__secret_key = "Dinozaur123"
 
+    def update_student(self,student: Student) -> Student or None:
+        return self.studentRepository.update_student(student)
 
     def get_student_by_email(self, email: str) -> Student or None:
         """

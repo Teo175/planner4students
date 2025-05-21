@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from sqlalchemy import UUID
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from server.models.course import Course
@@ -226,6 +227,209 @@ def register_routes_student(app, session):
             logger.error(f"Unexpected error in signup process: {str(e)}")
             return handle_response(
                 message="An unexpected error occurred during registration",
+                status_code=HTTP_ERROR_CODE
+            )
+
+    @students_bp.route('/student-profile/<student_id>', methods=['GET'])
+    def get_complete_student_profile(student_id):
+        """Endpoint to get complete student profile data including academic information"""
+        try:
+            logger.info(f"Getting complete profile for student: {student_id}")
+            # Obține studentul pe baza ID-ului
+            student = student_service.get_student_by_id(student_id)
+            if not student:
+                logger.warning(f"Student not found for ID: {student_id}")
+                return handle_response(
+                    message="Student not found",
+                    status_code=HTTP_NOT_FOUND_CODE,
+                    data=None
+                )
+
+            # Obține subgrupa studentului
+            subgroup = subgroup_service.get_subgroup_by_id(student.subgroup_id)
+            if not subgroup:
+                logger.error(f"Subgroup not found for student: {student_id}")
+                return handle_response(
+                    message="Subgroup not found",
+                    status_code=HTTP_ERROR_CODE,
+                    data=None
+                )
+
+            # Obține grupa din subgrupă
+            group = group_service.get_group_by_id(subgroup.group_id)
+            if not group:
+                logger.error(f"Group not found for student: {student_id}")
+                return handle_response(
+                    message="Group not found",
+                    status_code=HTTP_ERROR_CODE,
+                    data=None
+                )
+
+            # Obține anul de studiu din grupă
+            study_year = study_year_service.get_study_year_by_id(group.study_year_id)
+            if not study_year:
+                logger.error(f"Study year not found for student: {student_id}")
+                return handle_response(
+                    message="Study year not found",
+                    status_code=HTTP_ERROR_CODE,
+                    data=None
+                )
+
+            # Obține specializarea din anul de studiu
+            specialization = specialization_service.get_specialization_by_id(study_year.specialization_id)
+            if not specialization:
+                logger.error(f"Specialization not found for student: {student_id}")
+                return handle_response(
+                    message="Specialization not found",
+                    status_code=HTTP_ERROR_CODE,
+                    data=None
+                )
+
+            # Construiește răspunsul cu toate datele necesare
+            complete_profile = {
+                'student_id': str(student.student_id),
+                'first_name': student.first_name,
+                'last_name': student.last_name,
+                'email': student.email,
+                'subgroup_id': student.subgroup_id,
+                'subgroup': str(subgroup.subgroup_number),
+                'group': str(group.group_number),
+                'year': study_year.year,
+                'language': specialization.language,
+                'specialization': specialization.name
+            }
+
+            logger.info(f"Complete profile retrieved successfully for student: {student_id}")
+            return handle_response(
+                message="Student profile retrieved successfully",
+                status_code=HTTP_OK_CODE,
+                data=complete_profile
+            )
+
+        except Exception as e:
+            logger.error(f"Error getting complete student profile: {str(e)}")
+            return handle_response(
+                message=f"Server error: {str(e)}",
+                status_code=HTTP_ERROR_CODE,
+                data=None
+            )
+
+    @students_bp.route('/update-student-profile', methods=['PUT'])
+    def update_student_profile():
+        """Endpoint to update student profile information"""
+        try:
+            logger.info("Student profile update attempt")
+
+            # Get the data from the request
+            data = request.get_json()
+            if not data:
+                logger.warning("Profile update attempt with no data")
+                return handle_response(
+                    message="No data provided",
+                    status_code=HTTP_BAD_REQUEST_CODE
+                )
+
+            # Extract the necessary data from the request
+            student_id = data.get('student_id')
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
+            subgroup_id = data.get('subgroup_id')
+
+            logger.info(f"Profile update attempt for student: {student_id}")
+
+            # Validate all required fields
+            missing_fields = []
+            if not student_id:
+                missing_fields.append('student_id')
+            if not first_name:
+                missing_fields.append('first_name')
+            if not last_name:
+                missing_fields.append('last_name')
+            if not subgroup_id:
+                missing_fields.append('subgroup_id')
+
+            if missing_fields:
+                missing = ', '.join(missing_fields)
+                logger.warning(f"Profile update missing required fields: {missing}")
+                return handle_response(
+                    message=f"Missing required fields: {missing}",
+                    status_code=HTTP_BAD_REQUEST_CODE
+                )
+
+            # Validează că studentul există
+            student = student_service.get_student_by_id(student_id)
+            if not student:
+                logger.warning(f"Student not found for ID: {student_id}")
+                return handle_response(
+                    message="Student not found",
+                    status_code=HTTP_NOT_FOUND_CODE,
+                    data=None
+                )
+
+            subgroup = subgroup_service.get_subgroup_by_id(subgroup_id)
+            if not subgroup:
+                logger.warning(f"Subgroup not found for ID: {subgroup_id}")
+                return handle_response(
+                    message="Subgroup not found",
+                    status_code=HTTP_BAD_REQUEST_CODE,
+                    data=None
+                )
+
+            # Actualizează datele studentului
+            student.first_name = first_name.strip()
+            student.last_name = last_name.strip()
+
+            # Verifică dacă subgrupa s-a schimbat
+            old_subgroup_id = student.subgroup_id
+            print(old_subgroup_id)
+            print(subgroup_id)
+            student.subgroup_id = subgroup_id
+
+            # Salvează modificările în baza de date
+            updated_student = student_service.update_student(student)
+
+            if updated_student:
+                logger.info(f"Student profile updated successfully: {student_id}")
+
+                # Dacă subgrupa s-a schimbat, actualizează și cursurile studentului
+                if old_subgroup_id != updated_student.subgroup_id:
+                    logger.info(f"Subgroup changed for student {student_id}: {old_subgroup_id} -> {updated_student.subgroup_id}")
+                    try:
+                        # Obține grupa din noua subgrupă
+                        group = group_service.get_group_by_id(subgroup.group_id)
+                        if group:
+                            # Obține cursurile pentru noua subgrupă
+                            courses = course_service.get_schedule_by_subgroup(subgroup, group)
+                            # Actualizează cursurile studentului
+                            student_courses_service.update_student_courses(student.student_id, courses)
+                            logger.info(f"Schedule updated for student {student_id} due to subgroup change")
+                        else:
+                            logger.warning(f"Group not found for subgroup {updated_student.subgroup_id}")
+                    except Exception as e:
+                        logger.error(f"Error updating student schedule after subgroup change: {str(e)}")
+                        # Nu returnăm eroare pentru că profilul s-a actualizat cu succes
+                        # doar logging-ul eșecului actualizării cursurilor
+
+                # Returnează datele actualizate ale studentului
+                serialized_student = student_service.serialize_student(updated_student)
+
+                return handle_response(
+                    message='Student profile updated successfully',
+                    data={"user": serialized_student},
+                    status_code=HTTP_OK_CODE
+                )
+            else:
+                logger.error(f"Student profile update failed for ID: {student_id}")
+                return handle_response(
+                    message='Student profile update failed',
+                    data=None,
+                    status_code=HTTP_ERROR_CODE
+                )
+
+        except Exception as e:
+            logger.error(f"Unexpected error in profile update process: {str(e)}")
+            return handle_response(
+                message="An unexpected error occurred during profile update",
                 status_code=HTTP_ERROR_CODE
             )
     # Register the blueprint with the app

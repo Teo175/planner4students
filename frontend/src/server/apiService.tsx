@@ -3,6 +3,18 @@ interface ResponseCache {
   [key: string]: any;
 }
 
+interface CompleteStudentData {
+  student_id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  subgroup_id: number;
+  subgroup: string;
+  group: string;
+  year: number;
+  language: string;
+  specialization: string;
+} 
 interface StudyOptions {
   uniqueNames: string[];
   uniqueLanguages: string[];
@@ -477,25 +489,84 @@ async getAcademicSchedule(): Promise<AcademicSchedule | null> {
   } catch (error) {
     console.error('Eroare la obținerea structurii anului academic:', error);
     return null;
-  }
-
-
-  
+  }  
 }
-
+/**
+ * Obține datele complete ale studentului pe baza student_id din localStorage
+ * @returns Datele complete ale studentului sau null în caz de eroare
+ */
+async getCompleteStudentData(): Promise<CompleteStudentData | null> {
+  try {
+    // Obține datele utilizatorului din localStorage
+    const userData = this.getUserData();
+    
+    // Verifică dacă există date utilizator și student_id
+    if (!userData || !userData.student_id) {
+      console.error('Nu s-au găsit date utilizator sau student_id');
+      return null;
+    }
+    
+    // Construiește endpoint-ul pentru obținerea datelor complete ale studentului
+    const endpoint = `student-profile/${userData.student_id}`;
+    
+    // Efectuează cererea API
+    const response = await this.callApi(endpoint);
+    
+    // Verifică dacă răspunsul este valid
+    if (response && response.status === 200 && response.data) {
+      return response.data as CompleteStudentData;
+    } else {
+      console.error('Răspuns invalid de la API pentru datele complete ale studentului:', response);
+      return null;
+    }
+  } catch (error) {
+    console.error('Eroare la obținerea datelor complete ale studentului:', error);
+    return null;
+  }
+}
 logout() {
   localStorage.removeItem('userData');
   localStorage.removeItem('authToken');
 }
-
-
-
-
-
-
-
-
-
+/**
+ * Actualizează profilul unui student
+ * @param profileData - Datele profilului de actualizat
+ * @returns Răspunsul de la API
+ */
+async updateStudentProfile(profileData: {
+  student_id: string;
+  first_name: string;
+  last_name: string;
+  subgroup_id: string;
+}): Promise<any> {
+  // Construim endpoint-ul pentru actualizarea profilului
+  const endpoint = 'update-student-profile';
+  
+  // Construim payload-ul pentru request
+  const payload = {
+    student_id: profileData.student_id,
+    first_name: profileData.first_name,
+    last_name: profileData.last_name,
+    subgroup_id: profileData.subgroup_id
+  };
+  
+  try {
+    // Facem apelul API cu metoda PUT pentru actualizare
+    const response = await this.callApi(endpoint, 'PUT', payload);
+    
+    // Verificăm dacă apelul a fost cu succes
+    if (response.status === 200) {
+      console.log('Profilul a fost actualizat cu succes pe server');
+    } else {
+      console.error('Eroare la actualizarea profilului:', response.message || 'Eroare necunoscută');
+    }
+    
+    return response;
+  } catch (error) {
+    console.error('Eroare la trimiterea datelor către server:', error);
+    throw error;
+  }
+}
   /**
    * Clear stored responses
    * @param endpoint - Specific endpoint to clear (optional)
