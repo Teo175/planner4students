@@ -328,6 +328,8 @@ const [tempAddedCourses, setTempAddedCourses] = useState([]);
     setSearchLoading(false);
   }
 };
+
+
   useEffect(() => {
     fetchGroupInfo();
     fetchCourses();

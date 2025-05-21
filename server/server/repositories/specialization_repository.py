@@ -24,6 +24,11 @@ class SpecializationRepository:
             language=language
         ).first()
 
+    def get_specialization_by_id(self, id) -> Specialization | None:
+        return self.session.query(Specialization).filter_by(
+            specialization_id=id
+        ).first()
+
     def add_specialization(self, name: str, language: str) -> Specialization:
         specialization = Specialization(
             name=name,

@@ -12,7 +12,33 @@ class StudentRepository:
          """
         self.session = sess
 
+    def update_student(self,student: Student) -> Student or None:
+        try:
+            # Update SQL direct
+            result = self.session.query(Student).filter(
+                Student.student_id == student.student_id
+            ).update({
+                Student.first_name: student.first_name,
+                Student.last_name: student.last_name,
+                Student.subgroup_id: student.subgroup_id
+            })
 
+            # Verifică dacă a fost actualizat cel puțin un rând
+            if result == 0:
+                print(f"Student with ID {student.student_id} not found")
+                return None
+
+            # Salvează modificările în baza de date
+            self.session.commit()
+
+            print(f"Student {student.student_id} updated successfully")
+            return student  # Returnează studentul cu datele actualizate
+
+        except Exception as e:
+            # În caz de eroare, rollback tranzacția
+            self.session.rollback()
+            print(f"Error updating Student: {e}")
+            return None
     def get_student_by_email(self, email: str) -> Student or None:
         """
         Retrieve a Student by their name

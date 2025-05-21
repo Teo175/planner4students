@@ -13,7 +13,14 @@ class SpecializationService:
     def __init__(self, session):
         self.specializationRepository = SpecializationRepository(session)
 
-
+    def get_specialization_by_id(self, id) -> Specialization or None:
+        """
+        Retrieve a subgroup by their subgroup_number and group id
+        :param subgroup_number: The number of the subgroup
+        :param group_id: The group that contains the subgroup
+        :return: Subgroup object or None if not found
+        """
+        return self.specializationRepository.get_specialization_by_id(id)
     def get_specialization_by_name_and_language(self, name,language) -> Specialization or None:
         """
         Retrieve a subgroup by their subgroup_number and group id

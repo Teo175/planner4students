@@ -154,7 +154,7 @@ $event-text-color: #fff;
   
 }
   .menu-button {
-    background: none;
+    background-color: #1a73e8;
     border: none;
     cursor: pointer;
     margin-right: 1rem;
@@ -163,9 +163,49 @@ $event-text-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+    &:hover {
+     background-color: #1a73e8;
+    }
+  }
+
+  // Stiluri pentru meniul dropdown
+  .menu-container {
+    position: relative;
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    z-index: 1000;
+    margin-top: 5px;
+    overflow: hidden;
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: $text-color;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: $secondary-color;
+    }
+
+    span {
+      margin-left: 8px;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $border-color;
     }
   }
 

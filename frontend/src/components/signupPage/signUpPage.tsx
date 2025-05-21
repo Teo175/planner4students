@@ -90,8 +90,8 @@ const Signup = () => {
         
         setError(null);
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Failed to load options. Please try again later.');
+        console.error('Eroare:', err);
+        setError('Eroare. Încearcă mai târziu.');
       } finally {
         setLoading(false);
       }
@@ -190,21 +190,18 @@ const Signup = () => {
       });
     });
     
-    // Sort by year
     matchingYears.sort((a, b) => a.year - b.year);
     setFilteredYearOptions(matchingYears);
   };
 
   const handleSubmit = async () => {
-    // Validate required fields
     if (!firstName || !lastName || !email || !password || 
         !selectedStudyField || !selectedLanguage || 
         !selectedYear || !selectedGroupNumber || !selectedSubgroupNumber) {
-      setError('Please fill in all required fields');
+      setError('Completați toate câmpurile obligatorii.');
       return;
     }
 
-    // Format data according to backend requirements
     const userData = {
       first_name: firstName,
       last_name: lastName,
@@ -241,29 +238,29 @@ const Signup = () => {
   return (
     <div className="signup-container">
       <div className="signup-form">
-        <p>Sign up for Planner4Students!</p>
+        <p>Înregistrează-te pe Planner4Students!</p>
         {error && <p className="error-message">{error}</p>}
         
         <div className="form-row">
-          <Field label="First name" className="field-container">
-            <Input placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+          <Field label="Prenume" className="field-container">
+            <Input placeholder="Ion" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
           </Field>
-          <Field label="Last name" className="field-container">
-            <Input placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+          <Field label="Nume" className="field-container">
+            <Input placeholder="Popescu" value={lastName} onChange={(e) => setLastName(e.target.value)} />
           </Field>
         </div>
         <div>
           <Field label="Email" className="field-container">
             <Input placeholder="johndoe@stud.ubbcluj.ro" value={email} onChange={(e) => setEmail(e.target.value)} />
           </Field>
-          <Field label="Password" className="field-container">
-            <Input type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Field label="Parola" className="field-container">
+            <Input type="password" placeholder="parola" value={password} onChange={(e) => setPassword(e.target.value)} />
           </Field>
         </div>
         <div className="selection-container">
           <Combobox 
             className="combobox" 
-            placeholder={loading ? "Loading study fields..." : "Select study field"} 
+            placeholder={loading ? "Încărcare specializări..." : "Selectează-ți specializarea"} 
             onOptionSelect={(_, data) => setSelectedStudyField(data.optionValue ?? '')}
             disabled={loading}
           >
@@ -273,7 +270,7 @@ const Signup = () => {
           </Combobox>
           <Combobox 
             className="combobox" 
-            placeholder={loading ? "Loading languages..." : "Select language"} 
+            placeholder={loading ? "Încărcare limba de predare..." : "Selectează limba de predare"} 
             onOptionSelect={(_, data) => setSelectedLanguage(data.optionValue ?? '')}
             disabled={loading}
           >
@@ -284,7 +281,7 @@ const Signup = () => {
           
           <Combobox
             className="combobox"
-            placeholder={loading ? "Loading years..." : filteredYearOptions.length === 0 ? "No years available" : "Select year"}
+            placeholder={loading ? "Încărcare an studii..." : filteredYearOptions.length === 0 ? "Nu există ani de studiu" : "Selectează anul"}
             onOptionSelect={(_, data) => {
               setSelectedYearId(data.optionValue || null);
               const yearOption = filteredYearOptions.find(y => y.id === data.optionValue);
@@ -293,15 +290,15 @@ const Signup = () => {
             disabled={loading || filteredYearOptions.length === 0}
           >
             {filteredYearOptions.map((option) => (
-              <Option key={option.id} text={`Year ${option.year}`} value={option.id}>
-                Year {option.year}
+              <Option key={option.id} text={`Anul ${option.year}`} value={option.id}>
+                Anul {option.year}
               </Option>
             ))}
           </Combobox>
         </div>
         <div className="form-row">
           <Combobox
-            placeholder={loading ? "Loading groups..." : filteredGroupOptions.length === 0 ? "Select year first" : "Select group"}
+            placeholder={loading ? "Încărcare grupe..." : filteredGroupOptions.length === 0 ? "Selectează anul mai întâi" : "Selectează grupa"}
             className="combobox2"
             onOptionSelect={(_, data) => {
               setSelectedGroupId(data.optionValue || null);
@@ -311,13 +308,13 @@ const Signup = () => {
             disabled={loading || filteredGroupOptions.length === 0}
           >
             {filteredGroupOptions.map((option) => (
-              <Option key={option.id} text={`Group ${option.number}`} value={option.id}>
-                Group {option.number}
+              <Option key={option.id} text={`Grupa ${option.number}`} value={option.id}>
+                Grupa {option.number}
               </Option>
             ))}
           </Combobox>
           <Combobox
-            placeholder={loading ? "Loading subgroups..." : filteredSubgroupOptions.length === 0 ? "Select group first" : "Select subgroup"}
+            placeholder={loading ? "Încărcare subgrupe..." : filteredSubgroupOptions.length === 0 ? "Selectează grupa mai întâi" : "Selectează subgrupa"}
             className="combobox2"
             onOptionSelect={(_, data) => {
               setSelectedSubgroupId(data.optionValue || null);
@@ -327,14 +324,14 @@ const Signup = () => {
             disabled={loading || filteredSubgroupOptions.length === 0}
           >
             {filteredSubgroupOptions.map((option) => (
-              <Option key={option.id} text={`Subgroup ${option.number}`} value={option.id}>
-                Subgroup {option.number}
+              <Option key={option.id} text={`Subgrupa ${option.number}`} value={option.id}>
+                Subgrupa {option.number}
               </Option>
             ))}
           </Combobox>
         </div>
-        <Button onClick={handleSubmit} disabled={loading}>Sign up</Button>
-        <p>Already have an account? <Link to="/login">Log in</Link></p>
+        <Button onClick={handleSubmit} disabled={loading}>Creează-ți cont</Button>
+        <p>Ai deja un cont? <Link to="/login">Loghează-te</Link></p>
       </div>
     </div>
   );

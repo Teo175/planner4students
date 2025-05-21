@@ -1,0 +1,493 @@
+.profile-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+}
+
+.half-width {
+  flex: 1 1 50%;
+  min-width: 200px;
+}
+
+.edit-profile-container {
+  max-width: 800px;
+  width: 100%;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #dadce0;
+
+  .header-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+
+    h1 {
+      color: #3c4043;
+      margin: 0;
+      font-size: 25px;
+    }
+  }
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: #1a73e8;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.5rem;
+  margin-left: -0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  width: fit-content;
+
+  span {
+    margin-left: 0.5rem;
+  }
+
+  &:hover {
+    background-color: rgba(26, 115, 232, 0.08);
+  }
+}
+
+.edit-mode-button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: 1px solid #1a73e8;
+  color: #1a73e8;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+
+  span {
+    margin-left: 0.5rem;
+  }
+
+  &:hover {
+    background-color: rgba(26, 115, 232, 0.08);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.edit-mode-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.save-edit-button {
+  display: flex;
+  align-items: center;
+  background-color: #1a73e8;
+  border: none;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+
+  span {
+    margin-left: 0.5rem;
+  }
+
+  &:hover {
+    background-color: #0d5bba;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.cancel-edit-button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: 1px solid #5f6368;
+  color: #5f6368;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+
+  span {
+    margin-left: 0.5rem;
+  }
+
+  &:hover {
+    background-color: rgba(95, 99, 104, 0.08);
+  }
+}
+
+.form-section {
+  margin-bottom: 2rem;
+
+  h2 {
+    color: #3c4043;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.dropdown-section {
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #5f6368;
+    font-weight: 500;
+  }
+
+  .name-input, .email-input {
+    width: 90%;
+    padding: 0.75rem;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: #1a73e8;
+    }
+
+    &:disabled {
+      background-color: #f1f3f4;
+      cursor: not-allowed;
+    }
+
+    &.error {
+      border-color: #d93025;
+    }
+  }
+  
+  .email-input {
+    width: 95%;
+  }
+
+  input[type="text"]:disabled {
+    background-color: #f1f3f4;
+    border: 1px solid #dadce0;
+    color: #5f6368;
+    cursor: not-allowed;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+}
+
+// Combobox styles for edit mode
+.combobox-edit {
+  width: 100% !important;
+  position: relative;
+  display: block !important;
+  
+  // Ensure the wrapper has relative positioning and full width
+  & > div {
+    position: relative;
+    width: 100% !important;
+    display: block !important;
+  }
+
+  // Target the root combobox component
+  .fui-Combobox__root,
+  div[role="combobox"] {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  // Input field styles
+  input, 
+  .fui-Combobox__input,
+  input[role="combobox"] {
+    width: 100% !important;
+    padding: 0.75rem 2.5rem 0.75rem 0.75rem !important; // Extra padding on right for arrow
+    border: 1px solid #dadce0 !important;
+    border-radius: 4px !important;
+    font-size: 1rem !important;
+    background-color: white !important;
+    box-sizing: border-box !important;
+    appearance: none !important; // Remove default browser styling
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    display: block !important;
+    min-width: 0 !important; // Prevent flex shrinking issues
+
+    &:focus {
+      border-color: #1a73e8 !important;
+      outline: none !important;
+      box-shadow: 0 0 0 1px #1a73e8 !important;
+    }
+
+    &:disabled {
+      background-color: #f1f3f4 !important;
+      cursor: not-allowed !important;
+      color: #5f6368 !important;
+    }
+  }
+
+  // Custom dropdown arrow
+  &::after {
+    content: '▼';
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #5f6368;
+    font-size: 0.75rem;
+    line-height: 1;
+    z-index: 10;
+  }
+
+  // When disabled, gray out the arrow
+  &:has(input:disabled)::after,
+  &:has(.fui-Combobox__input:disabled)::after {
+    color: #9aa0a6;
+  }
+
+  // FluentUI specific expand icon (if it exists)
+  .fui-Combobox__expandIcon,
+  button[data-tabster] {
+    position: absolute !important;
+    right: 0.75rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: none !important;
+    border: none !important;
+    color: #5f6368 !important;
+    font-size: 1rem !important;
+    z-index: 2 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
+
+    &:disabled {
+      color: #9aa0a6 !important;
+    }
+  }
+
+  // Listbox/dropdown menu styles
+  .fui-Combobox__listbox {
+    border: 1px solid #dadce0 !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+    background-color: white !important;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+    z-index: 1000 !important;
+    width: 100% !important;
+  }
+
+  // Option styles
+  .fui-Option__root {
+    padding: 0.75rem !important;
+    cursor: pointer !important;
+    border-bottom: 1px solid #f1f3f4 !important;
+    font-size: 1rem !important;
+
+    &:hover {
+      background-color: #f8f9fa !important;
+    }
+
+    &[aria-selected="true"] {
+      background-color: rgba(26, 115, 232, 0.08) !important;
+      color: #1a73e8 !important;
+    }
+
+    &:last-child {
+      border-bottom: none !important;
+    }
+  }
+}
+
+// Additional targeting for when combobox is disabled
+.combobox-edit[data-disabled="true"],
+.combobox-edit.disabled {
+  &::after {
+    color: #9aa0a6;
+  }
+  
+  input, .fui-Combobox__input {
+    background-color: #f1f3f4 !important;
+    cursor: not-allowed !important;
+    color: #5f6368 !important;
+  }
+}
+
+// Ensure form groups don't constrain the combobox
+.form-group {
+  .combobox-edit {
+    width: 100% !important;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #dadce0;
+}
+
+.cancel-button,
+.save-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.cancel-button {
+  background-color: #f1f3f4;
+  color: #3c4043;
+
+  &:hover {
+    background-color: #e8eaed;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.save-button {
+  background-color: #1a73e8;
+  color: white;
+
+  &:hover {
+    background-color: #0d5bba;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.message {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+
+  &.success {
+    background-color: #e6f4ea;
+    color: #137333;
+    border: 1px solid #ceead6;
+  }
+
+  &.error {
+    background-color: #fce8e6;
+    color: #c5221f;
+    border: 1px solid #f6d7d5;
+  }
+
+  &.info {
+    background-color: #e8f0fe;
+    color: #1967d2;
+    border: 1px solid #d2e3fc;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  font-size: 1.25rem;
+  color: #5f6368;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .edit-profile-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .header-title-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .edit-mode-actions {
+    flex-direction: column;
+    width: 100%;
+    
+    .save-edit-button,
+    .cancel-edit-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .half-width {
+    min-width: unset;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    
+    .cancel-button,
+    .save-button {
+      width: 100%;
+    }
+  }
+}
