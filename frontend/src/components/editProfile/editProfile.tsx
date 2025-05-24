@@ -4,7 +4,7 @@ import { ArrowLeft, Edit, Save, X } from 'lucide-react';
 import { Combobox, Option } from '@fluentui/react-components';
 import Swal from 'sweetalert2';
 import './EditProfile.scss';
-import apiService from '../../server/apiService';
+import apiService from '../../api/server/apiService';
 
 interface UserData {
   student_id: string;
@@ -138,44 +138,6 @@ const EditProfile: React.FC = () => {
     
     matchingYears.sort((a, b) => a.year - b.year);
     setFilteredYearOptions(matchingYears);
-  };
-
-  // Function to find the correct IDs based on current selections
-  const findUserSelectionIds = () => {
-    if (!selectedStudyField || !selectedLanguage || !selectedYear || 
-        !selectedGroupNumber || !selectedSubgroupNumber) return;
-
-    try {
-      // Find specialization ID
-      const specialization = allSpecializations.find(spec => 
-        spec.name === selectedStudyField && spec.language === selectedLanguage
-      );
-      if (!specialization) return;
-
-      // Find year ID
-      const year = studyYears.find(y => 
-        y.year === selectedYear && y.specialization_id === specialization.specialization_id
-      );
-      if (!year) return;
-      setSelectedYearId(year.study_year_id);
-
-      // Find group ID
-      const group = allGroups.find(g => 
-        g.group_number === selectedGroupNumber && g.study_year_id === year.study_year_id
-      );
-      if (!group) return;
-      setSelectedGroupId(group.group_id);
-
-      // Find subgroup ID
-      const subgroup = allSubgroups.find(s => 
-        s.subgroup_number === selectedSubgroupNumber && s.group_id === group.group_id
-      );
-      if (!subgroup) return;
-      setSelectedSubgroupId(subgroup.subgroup_id);
-
-    } catch (error) {
-      console.error('Error finding selection IDs:', error);
-    }
   };
 
   // Function to find IDs based on complete user data received from server
@@ -490,7 +452,7 @@ const EditProfile: React.FC = () => {
       if (originalSubgroupId && newSubgroupId && originalSubgroupId !== newSubgroupId) {
         // Afișează warning pentru schimbarea subgrupei folosind SweetAlert2
         const result = await Swal.fire({
-          title: '⚠️ Atenție',
+          title: 'Atenție',
           html: `
             <p>Odată ce modifici informațiile academice, orarul se va modifica conform datelor selectate.</p>
             <p>Cursurile din vechea subgrupă vor fi înlocuite cu cele din noua subgrupă.</p>
@@ -623,218 +585,221 @@ const EditProfile: React.FC = () => {
   return (
     <div className="profile-page">
       <div className="edit-profile-container">
-        <div className="profile-header">
-          <button className="back-button" onClick={() => navigate('/schedule')} title="Înapoi la orar">
-            <ArrowLeft size={20} />
-            <span>Înapoi la orar</span>
-          </button>
-          <div className="header-title-container">
-            <h1>Editare Profil</h1>
-            {!isEditMode ? (
-              <button
-                className="edit-mode-button"
-                onClick={handleEditMode}
-                title="Editează profilul"
-              >
-                <Edit size={18} />
-                <span>Editează</span>
-              </button>
-            ) : (
-              <div className="edit-mode-actions">
+        <div className="profile-content">
+          <div className="profile-header">
+            <button className="back-button" onClick={() => navigate('/schedule')} title="Înapoi la orar">
+              <ArrowLeft size={20} />
+              <span>Înapoi la orar</span>
+            </button>
+            <div className="header-title-container">
+              <h1>Editare Profil</h1>
+              {!isEditMode ? (
                 <button
-                  className="save-edit-button"
-                  onClick={handleSubmit}
-                  title="Salvează modificările"
-                  disabled={!isFormModified || dropdownsLoading}
+                  className="edit-mode-button"
+                  onClick={handleEditMode}
+                  title="Editează profilul"
                 >
-                  <Save size={18} />
-                  <span>Salvează</span>
+                  <Edit size={18} />
+                  <span>Editează</span>
                 </button>
-                <button
-                  className="cancel-edit-button"
-                  onClick={handleCancelEdit}
-                  title="Anulează editarea"
-                >
-                  <X size={18} />
-                  <span>Anulează</span>
-                </button>
+              ) : (
+                <div className="edit-mode-actions">
+                  <button
+                    className="save-edit-button"
+                    onClick={handleSubmit}
+                    title="Salvează modificările"
+                    disabled={!isFormModified || dropdownsLoading}
+                  >
+                    <Save size={18} />
+                    <span>Salvează</span>
+                  </button>
+                  <button
+                    className="cancel-edit-button"
+                    onClick={handleCancelEdit}
+                    title="Anulează editarea"
+                  >
+                    <X size={18} />
+                    <span>Anulează</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {message && <div className={`message ${message.type}`}>{message.text}</div>}
+
+          <div className="form-sections-container">
+            <form onSubmit={handleSubmit}>
+              <div className="form-section">
+                <h2>Informații Personale</h2>
+
+                <div className="form-row">
+                  <div className="form-group half-width">
+                    <label htmlFor="first_name">Prenume</label>
+                    <input
+                      type="text"
+                      id="first_name"
+                      name="first_name"
+                      className='name-input'
+                      value={userData?.first_name || ''}
+                      onChange={handleInputChange}
+                      required
+                      disabled={!isEditMode}
+                    />
+                  </div>
+
+                  <div className="form-group half-width">
+                    <label htmlFor="last_name">Nume</label>
+                    <input
+                      type="text"
+                      id="last_name"
+                      name="last_name"
+                      className='name-input'
+                      value={userData?.last_name || ''}
+                      onChange={handleInputChange}
+                      required
+                      disabled={!isEditMode}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className='email-input'
+                    value={userData?.email || ''}
+                    onChange={handleInputChange}
+                    required
+                    disabled
+                  />
+                </div>
               </div>
-            )}
+
+              <div className="form-section">
+                <h2>Informații Academice</h2>
+
+                <div className="dropdown-section">
+                  <div className="form-group">
+                    <label>Specializare</label>
+                    <Combobox 
+                      className="combobox-edit" 
+                      placeholder={dropdownsLoading ? "Încărcare specializări..." : !isEditMode ? (selectedStudyField || "Specializare") : "Selectează-ți specializarea"} 
+                      onOptionSelect={(_, data) => {
+                        if (isEditMode) {
+                          setSelectedStudyField(data.optionValue ?? '');
+                          setIsFormModified(true);
+                        }
+                      }}
+                      value={selectedStudyField}
+                      disabled={!isEditMode || dropdownsLoading}
+                    >
+                      {studyOptions.map((option) => (
+                        <Option key={option} text={option} value={option}>{option}</Option>
+                      ))}
+                    </Combobox>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Limba de predare</label>
+                    <Combobox 
+                      className="combobox-edit" 
+                      placeholder={dropdownsLoading ? "Încărcare limba de predare..." : !isEditMode ? (selectedLanguage || "Limba de predare") : "Selectează limba de predare"} 
+                      onOptionSelect={(_, data) => {
+                        if (isEditMode) {
+                          setSelectedLanguage(data.optionValue ?? '');
+                          setIsFormModified(true);
+                        }
+                      }}
+                      value={selectedLanguage}
+                      disabled={!isEditMode || dropdownsLoading}
+                    >
+                      {languageOptions.map((option) => (
+                        <Option key={option} text={option} value={option}>{option}</Option>
+                      ))}
+                    </Combobox>
+                  </div>
+
+                  <div className="form-group">
+                    <label>An de studiu</label>
+                    <Combobox
+                      className="combobox-edit"
+                      placeholder={dropdownsLoading ? "Încărcare an studii..." : !isEditMode ? (selectedYear ? `Anul ${selectedYear}` : "An de studiu") : filteredYearOptions.length === 0 ? "Selectează specializarea și limba mai întâi" : "Selectează anul"}
+                      onOptionSelect={(_, data) => {
+                        if (isEditMode) {
+                          setSelectedYearId(data.optionValue || null);
+                          const yearOption = filteredYearOptions.find(y => y.id === data.optionValue);
+                          setSelectedYear(yearOption ? yearOption.year : null);
+                          setIsFormModified(true);
+                        }
+                      }}
+                      value={selectedYear ? `${selectedYear}` : ''}
+                      disabled={!isEditMode || dropdownsLoading}
+                    >
+                      {filteredYearOptions.map((option) => (
+                        <Option key={option.id} text={`Anul ${option.year}`} value={option.id}>
+                          Anul {option.year}
+                        </Option>
+                      ))}
+                    </Combobox>
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group half-width">
+                      <label>Grupa</label>
+                      <Combobox
+                        placeholder={dropdownsLoading ? "Încărcare grupe..." : !isEditMode ? (selectedGroupNumber ? `Grupa ${selectedGroupNumber}` : "Grupa") : filteredGroupOptions.length === 0 ? "Selectează anul și specializarea mai întâi" : "Selectează grupa"}
+                        className="combobox-edit"
+                        onOptionSelect={(_, data) => {
+                          if (isEditMode) {
+                            setSelectedGroupId(data.optionValue || null);
+                            const groupOption = filteredGroupOptions.find(g => g.id === data.optionValue);
+                            setSelectedGroupNumber(groupOption ? groupOption.number : null);
+                            setIsFormModified(true);
+                          }
+                        }}
+                        value={selectedGroupNumber ? `${selectedGroupNumber}` : ''} 
+                        disabled={!isEditMode || dropdownsLoading}
+                      >
+                        {filteredGroupOptions.map((option) => (
+                          <Option key={option.id} text={`Grupa ${option.number}`} value={option.id}>
+                            Grupa {option.number}
+                          </Option>
+                        ))}
+                      </Combobox>
+                    </div>
+
+                    <div className="form-group half-width">
+                      <label>Subgrupa</label>
+                      <Combobox
+                        placeholder={dropdownsLoading ? "Încărcare subgrupe..." : !isEditMode ? (selectedSubgroupNumber ? `Subgrupa ${selectedSubgroupNumber}` : "Subgrupa") : filteredSubgroupOptions.length === 0 ? "Selectează grupa mai întâi" : "Selectează subgrupa"}
+                        className="combobox-edit"
+                        onOptionSelect={(_, data) => {
+                          if (isEditMode) {
+                            setSelectedSubgroupId(data.optionValue || null);
+                            const subgroupOption = filteredSubgroupOptions.find(s => s.id === data.optionValue);
+                            setSelectedSubgroupNumber(subgroupOption ? subgroupOption.number : null);
+                            setIsFormModified(true);
+                          }
+                        }}
+                       value={selectedSubgroupNumber ? `${selectedSubgroupNumber}` : ''} 
+                        disabled={!isEditMode || dropdownsLoading}
+                      >
+                        {filteredSubgroupOptions.map((option) => (
+                          <Option key={option.id} text={`Subgrupa ${option.number}`} value={option.id}>
+                            Subgrupa {option.number}
+                          </Option>
+                        ))}
+                      </Combobox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-
-        {message && <div className={`message ${message.type}`}>{message.text}</div>}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-section">
-            <h2>Informații Personale</h2>
-
-            <div className="form-row">
-              <div className="form-group half-width">
-                <label htmlFor="first_name">Prenume</label>
-                <input
-                  type="text"
-                  id="first_name"
-                  name="first_name"
-                  className='name-input'
-                  value={userData?.first_name || ''}
-                  onChange={handleInputChange}
-                  required
-                  disabled={!isEditMode}
-                />
-              </div>
-
-              <div className="form-group half-width">
-                <label htmlFor="last_name">Nume</label>
-                <input
-                  type="text"
-                  id="last_name"
-                  name="last_name"
-                  className='name-input'
-                  value={userData?.last_name || ''}
-                  onChange={handleInputChange}
-                  required
-                  disabled={!isEditMode}
-                />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className='email-input'
-                value={userData?.email || ''}
-                onChange={handleInputChange}
-                required
-                disabled
-              />
-            </div>
-          </div>
-
-          <div className="form-section">
-            <h2>Informații Academice</h2>
-
-            <div className="dropdown-section">
-              <div className="form-group">
-                <label>Specializare</label>
-                <Combobox 
-                  className="combobox-edit" 
-                  placeholder={dropdownsLoading ? "Încărcare specializări..." : !isEditMode ? (selectedStudyField || "Specializare") : "Selectează-ți specializarea"} 
-                  onOptionSelect={(_, data) => {
-                    if (isEditMode) {
-                      setSelectedStudyField(data.optionValue ?? '');
-                      setIsFormModified(true);
-                    }
-                  }}
-                  value={selectedStudyField}
-                  disabled={!isEditMode || dropdownsLoading}
-                >
-                  {studyOptions.map((option) => (
-                    <Option key={option} text={option} value={option}>{option}</Option>
-                  ))}
-                </Combobox>
-              </div>
-
-              <div className="form-group">
-                <label>Limba de predare</label>
-                <Combobox 
-                  className="combobox-edit" 
-                  placeholder={dropdownsLoading ? "Încărcare limba de predare..." : !isEditMode ? (selectedLanguage || "Limba de predare") : "Selectează limba de predare"} 
-                  onOptionSelect={(_, data) => {
-                    if (isEditMode) {
-                      setSelectedLanguage(data.optionValue ?? '');
-                      setIsFormModified(true);
-                    }
-                  }}
-                  value={selectedLanguage}
-                  disabled={!isEditMode || dropdownsLoading}
-                >
-                  {languageOptions.map((option) => (
-                    <Option key={option} text={option} value={option}>{option}</Option>
-                  ))}
-                </Combobox>
-              </div>
-
-              <div className="form-group">
-                <label>An de studiu</label>
-                <Combobox
-                  className="combobox-edit"
-                  placeholder={dropdownsLoading ? "Încărcare an studii..." : !isEditMode ? (selectedYear ? `Anul ${selectedYear}` : "An de studiu") : filteredYearOptions.length === 0 ? "Selectează specializarea și limba mai întâi" : "Selectează anul"}
-                  onOptionSelect={(_, data) => {
-                    if (isEditMode) {
-                      setSelectedYearId(data.optionValue || null);
-                      const yearOption = filteredYearOptions.find(y => y.id === data.optionValue);
-                      setSelectedYear(yearOption ? yearOption.year : null);
-                      setIsFormModified(true);
-                    }
-                  }}
-                  value={selectedYear ? `${selectedYear}` : ''}
-                  disabled={!isEditMode || dropdownsLoading}
-                >
-                  {filteredYearOptions.map((option) => (
-                    <Option key={option.id} text={`Anul ${option.year}`} value={option.id}>
-                      Anul {option.year}
-                    </Option>
-                  ))}
-                </Combobox>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group half-width">
-                  <label>Grupa</label>
-                  <Combobox
-                    placeholder={dropdownsLoading ? "Încărcare grupe..." : !isEditMode ? (selectedGroupNumber ? `Grupa ${selectedGroupNumber}` : "Grupa") : filteredGroupOptions.length === 0 ? "Selectează anul și specializarea mai întâi" : "Selectează grupa"}
-                    className="combobox-edit"
-                    onOptionSelect={(_, data) => {
-                      if (isEditMode) {
-                        setSelectedGroupId(data.optionValue || null);
-                        const groupOption = filteredGroupOptions.find(g => g.id === data.optionValue);
-                        setSelectedGroupNumber(groupOption ? groupOption.number : null);
-                        setIsFormModified(true);
-                      }
-                    }}
-                    value={selectedGroupNumber ? `${selectedGroupNumber}` : ''} 
-                    disabled={!isEditMode || dropdownsLoading}
-                  >
-                    {filteredGroupOptions.map((option) => (
-                      <Option key={option.id} text={`Grupa ${option.number}`} value={option.id}>
-                        Grupa {option.number}
-                      </Option>
-                    ))}
-                  </Combobox>
-                </div>
-
-                <div className="form-group half-width">
-                  <label>Subgrupa</label>
-                  <Combobox
-                    placeholder={dropdownsLoading ? "Încărcare subgrupe..." : !isEditMode ? (selectedSubgroupNumber ? `Subgrupa ${selectedSubgroupNumber}` : "Subgrupa") : filteredSubgroupOptions.length === 0 ? "Selectează grupa mai întâi" : "Selectează subgrupa"}
-                    className="combobox-edit"
-                    onOptionSelect={(_, data) => {
-                      if (isEditMode) {
-                        setSelectedSubgroupId(data.optionValue || null);
-                        const subgroupOption = filteredSubgroupOptions.find(s => s.id === data.optionValue);
-                        setSelectedSubgroupNumber(subgroupOption ? subgroupOption.number : null);
-                        setIsFormModified(true);
-                      }
-                    }}
-                   value={selectedSubgroupNumber ? `${selectedSubgroupNumber}` : ''} 
-                    disabled={!isEditMode || dropdownsLoading}
-                  >
-                    {filteredSubgroupOptions.map((option) => (
-                      <Option key={option.id} text={`Subgrupa ${option.number}`} value={option.id}>
-                        Subgrupa {option.number}
-                      </Option>
-                    ))}
-                  </Combobox>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </form>
       </div>
     </div>
   );

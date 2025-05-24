@@ -1,26 +1,69 @@
-export const MESSAGE: string =
-  "Something went wrong with the database, try refreshing the page!";
-export const LOGIN_ERROR_MESSAGE_FIELDS_MISSING: string =
-  "You must provide both the email and the password!";
-export const LOGIN_ERROR_MESSAGE_CREDENTIALS_MISMATCH: string =
-  "The provided credentials do not match. Try again!";
-export const CONTEXT_ERROR: string =
-  "useUserContext must be used within a UserProvider";
-export const FETCH_EMAILS_ERROR = "Failed to fetch emails.";
-export const EMAIL_CONTEXT_ERROR =
-  "useEmailContext must be used within an EmailProvider";
-export const FETCH_USERS_ERROR = "Failed to fetch users:";
-export const ASSIGN_NOTIFICATION_MESSAGE = (sender_email: string) =>
-  `You were assigned to solve ${sender_email} complain!`;
-export const REPLY_NOTIFICATION_MESSAGE = (reply_sender: string) => `Your email got a new reply from ${reply_sender}!`;
-export const STATUS_CHANGE_NOTIFICATION_MESSAGE = (status: string) => `The status of your complaint changed to ${status}!`;
-export const ACTIVITY_NOTIFICATION_MESSAGE = "The email you were assigned to solve got new activity!";
-export const USER = "user";
-export const INBOX_ID = "inbox";
-export const SPAM_ID = "spam";
-export const CONFIRMATION_DIALOG =
-  "Are you sure you want to delete the selected emails? This action cannot be undone.";
-export const TRANSLATE = "Translate";
-export const SUMMARIZE = "Summarize";
-export const SHOW_ORIGINAL = "Show original";
-export const TRANSLATION_LOADING = "Translation is loading...";
+// text.ts - Text constants for the application
+
+// ============ LOGIN PAGE MESSAGES ============
+export const LOGIN_WELCOME_MESSAGE = "Bine ai venit!";
+export const LOGIN_SUBTITLE = "Loghează-te pentru a intra în aplicație.";
+export const LOGIN_EMAIL_REQUIRED_ERROR = "Email-ul și parola sunt obligatorii.";
+export const LOGIN_SUCCESS_MESSAGE = "Autentificare reușită!";
+export const LOGIN_INVALID_CREDENTIALS = "Date de autentificare invalide";
+export const LOGIN_NETWORK_ERROR_PREFIX = "Eroare de rețea: ";
+export const LOGIN_NO_ACCOUNT_TEXT = "Nu ai cont? ";
+export const LOGIN_REGISTER_LINK_TEXT = "Înregistrează-te";
+
+// ============ LOGIN FORM LABELS ============
+export const LOGIN_EMAIL_LABEL = "Email";
+export const LOGIN_PASSWORD_LABEL = "Parola";
+
+// ============ LOGIN FORM PLACEHOLDERS ============
+export const LOGIN_EMAIL_PLACEHOLDER = "IonPopescu@stud.ubbcluj.ro";
+export const LOGIN_PASSWORD_PLACEHOLDER = "parola";
+
+// ============ LOGIN BUTTON STATES ============
+export const LOGIN_BUTTON_DEFAULT = "Loghează-te";
+export const LOGIN_BUTTON_LOADING = "Logare...";
+
+// ============ SIGNUP PAGE MESSAGES ============
+export const SIGNUP_TITLE = "Înregistrează-te pe Planner4Students!";
+export const SIGNUP_ALL_FIELDS_REQUIRED = "Completați toate câmpurile obligatorii.";
+export const SIGNUP_FAILED_ERROR = "Înregistrarea a eșuat";
+export const SIGNUP_NETWORK_ERROR = "Eroare de rețea în timpul înregistrării";
+export const SIGNUP_LOADING_ERROR = "Eroare. Încearcă mai târziu.";
+export const SIGNUP_ALREADY_HAVE_ACCOUNT = "Ai deja un cont? ";
+export const SIGNUP_LOGIN_LINK_TEXT = "Loghează-te";
+
+// ============ SIGNUP FORM LABELS ============
+export const SIGNUP_FIRST_NAME_LABEL = "Prenume";
+export const SIGNUP_LAST_NAME_LABEL = "Nume";
+export const SIGNUP_EMAIL_LABEL = "Email";
+export const SIGNUP_PASSWORD_LABEL = "Parola";
+
+// ============ SIGNUP FORM PLACEHOLDERS ============
+export const SIGNUP_FIRST_NAME_PLACEHOLDER = "Ion";
+export const SIGNUP_LAST_NAME_PLACEHOLDER = "Popescu";
+export const SIGNUP_EMAIL_PLACEHOLDER = "johndoe@stud.ubbcluj.ro";
+export const SIGNUP_PASSWORD_PLACEHOLDER = "parola";
+
+// ============ SIGNUP DROPDOWN LOADING STATES ============
+export const SIGNUP_LOADING_SPECIALIZATIONS = "Încărcare specializări...";
+export const SIGNUP_LOADING_LANGUAGES = "Încărcare limba de predare...";
+export const SIGNUP_LOADING_YEARS = "Încărcare an studii...";
+export const SIGNUP_LOADING_GROUPS = "Încărcare grupe...";
+export const SIGNUP_LOADING_SUBGROUPS = "Încărcare subgrupe...";
+
+// ============ SIGNUP DROPDOWN PLACEHOLDERS ============
+export const SIGNUP_SELECT_SPECIALIZATION = "Selectează-ți specializarea";
+export const SIGNUP_SELECT_LANGUAGE = "Selectează limba de predare";
+export const SIGNUP_SELECT_YEAR = "Selectează anul";
+export const SIGNUP_NO_YEARS_AVAILABLE = "Nu există ani de studiu";
+export const SIGNUP_SELECT_YEAR_FIRST = "Selectează anul mai întâi";
+export const SIGNUP_SELECT_GROUP = "Selectează grupa";
+export const SIGNUP_SELECT_GROUP_FIRST = "Selectează grupa mai întâi";
+export const SIGNUP_SELECT_SUBGROUP = "Selectează subgrupa";
+
+// ============ SIGNUP DROPDOWN OPTION PREFIXES ============
+export const SIGNUP_YEAR_PREFIX = "Anul ";
+export const SIGNUP_GROUP_PREFIX = "Grupa ";
+export const SIGNUP_SUBGROUP_PREFIX = "Subgrupa ";
+
+// ============ SIGNUP BUTTON TEXT ============
+export const SIGNUP_BUTTON_TEXT = "Creează-ți cont";

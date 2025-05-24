@@ -18,6 +18,7 @@ from server.models.study_year import StudyYear
 from server.models.subgroup import Subgroup
 from server.routes.course_routes import register_routes_course
 from server.routes.group_routes import register_routes_group
+from server.routes.room_routes import register_routes_room
 from server.routes.schedule_routes import register_routes_schedule
 from server.routes.specialization_routes import register_routes_specialization
 from server.routes.student_routes import register_routes_student
@@ -46,6 +47,7 @@ from sqlalchemy.orm import sessionmaker
 from server.routes.study_year_routes import register_routes_study_year
 from server.routes.subgroup_routes import register_routes_subgroup
 from server.scraper.course_scrapper import CourseScrapper
+from server.scraper.room_scraper import RoomScrapper
 from server.scraper.specializations_scrapper import SpecializationsScrapper
 from server.scraper.structure_of_schedule_scrapper import StructureOfScheduleScrapper
 from server.services.academic_schedule_service import AcademicScheduleService
@@ -67,64 +69,55 @@ def update_db(session):
     else:
         logger.info(f"Nu este necesară actualizarea bazei de date astăzi ({today}).")
 
+
 def repopulate_structure_of_year_db(session):
-        '''
-        Aceasta functie se va apela pentru actualizarea intregii bd, structura-an scolar,ore,cursuri in functie de perioada de an.
-        In prima zi din sem1 se apeleaza si in prima zi din sem2
-        '''
-        logger = setup_logger(__name__)
+    '''
+    Aceasta functie se va apela pentru actualizarea intregii bd, structura-an scolar,ore,cursuri in functie de perioada de an.
+    In prima zi din sem1 se apeleaza si in prima zi din sem2
+    '''
+    logger = setup_logger(__name__)
 
-        # Salvează un snapshot al datelor existente pentru rollback posibil
-        try:
-            # Începe o tranzacție explicită
-            transaction = session.begin_nested()
+    try:
+        logger.info('Starting database repopulation...')
 
-            logger.info('Starting database repopulation...')
+        # Șterge datele în ordinea corectă pentru a respecta constrângerile de integritate
+        session.query(Course).delete()
+        session.query(Subgroup).delete()
+        session.query(Group).delete()
+        session.query(StudyYear).delete()
+        session.query(Specialization).delete()
+        session.query(Professor).delete()
+        session.query(Room).delete()
+        session.query(AcademicHoliday).delete()
+        session.query(AcademicSchedule).delete()
 
-            # Șterge datele în ordinea corectă pentru a respecta constrângerile de integritate
-            session.query(Course).delete()
-            session.query(Subgroup).delete()
-            session.query(Group).delete()
-            session.query(StudyYear).delete()
-            session.query(Specialization).delete()
-            session.query(Professor).delete()
-            session.query(Room).delete()
-            session.query(AcademicHoliday).delete()
-            session.query(AcademicSchedule).delete()
+        # Commit deletion
+        session.commit()
+        logger.info('Database cleared successfully, starting data extraction...')
 
-            logger.info('Database cleared successfully, starting data extraction...')
+        # Extrage și încarcă datele noi
+        # Inițializează și execută scrapere-le
+        structure_of_year_scrapper = StructureOfScheduleScrapper(session)
+        structure_of_year_scrapper.scrape_schedule()
 
-            # Extrage și încarcă datele noi
-            try:
-                # Inițializează și execută scrapere-le
-                structure_of_year_scrapper = StructureOfScheduleScrapper(session)
-                structure_of_year_scrapper.scrape_schedule()
+        schedule_scrapper = SpecializationsScrapper(session)
+        schedule_scrapper.scrape_specializations()
 
-                schedule_scrapper = SpecializationsScrapper(session)
-                schedule_scrapper.scrape_specializations()
+        room_scrapper = RoomScrapper(session)
+        room_scrapper.scrape_and_update_complete()
 
-                # Dacă ajungem aici, totul a funcționat - commit tranzacția
-                transaction.commit()
-                logger.info('Database repopulation completed successfully!')
+        logger.info('Database repopulation completed successfully!')
 
-            except Exception as scraping_error:
-                # Rollback la savepoint-ul creat de begin_nested()
-                transaction.rollback()
-                logger.error(f'Error during data scraping: {str(scraping_error)}. Rolling back to previous state.')
-                # Re-raise excepția pentru a fi tratată de nivelul superior
-                raise scraping_error
+    except Exception as error:
+        # Rollback în caz de eroare
+        session.rollback()
+        logger.error(f'Error during database repopulation: {str(error)}. Rolling back.')
+        raise error
 
-        except Exception as outer_error:
-            # Asigură-te că orice excepție din afara blocului tranzacțional este tratată
-            session.rollback()  # Rollback complet al sesiunii
-            logger.critical(
-                f'Critical error during database repopulation: {str(outer_error)}. Database rolled back to original state.')
-            raise outer_error
-
-        finally:
-            # Curăță orice resurse deschise
-            logger.info('Cleanup complete.')
-
+    finally:
+        logger.info('Cleanup complete.')
+def refresh_db(session):
+    repopulate_structure_of_year_db(session)
 def create_app():
     logger = setup_logger(__name__)
     logger.info("Starting Flask application setup...")
@@ -135,9 +128,10 @@ def create_app():
     Session = sessionmaker(bind=engine)
 
     # Crează o singură sesiune pentru update_db
-    scraper_session = Session()
-    update_db(scraper_session)
-    scraper_session.close()  # Închide sesiunea după utilizare
+    # scraper_session = Session()
+    # update_db(scraper_session)
+    # refresh_db(scraper_session)
+    # scraper_session.close()  # Închide sesiunea după utilizare
 
     # Creează un scoped_session pentru a partaja aceeași sesiune între rute
     from sqlalchemy.orm import scoped_session
@@ -149,4 +143,6 @@ def create_app():
     register_routes_subgroup(app,session)
     register_routes_course(app,session)
     register_routes_schedule(app,session)
+    register_routes_room(app,session)
+
     return app

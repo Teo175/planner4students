@@ -187,7 +187,7 @@ def register_routes_student(app, session):
             if existing_student:
                 logger.warning(f"Signup attempt for existing email: {email}")
                 return handle_response(
-                    message='Student already has an account',
+                    message='Acest email este deja asociat unui cont',
                     data=None,
                     status_code=HTTP_ERROR_CODE
                 )
@@ -211,14 +211,14 @@ def register_routes_student(app, session):
 
                 student_courses_service.update_student_courses(student.student_id,courses)
                 return handle_response(
-                    message='Student created successfully',
+                    message='Contul a fost creat cu succes',
                     data={"user": serialized_user, "token": token},
                     status_code=HTTP_OK_CODE
                 )
             else:
                 logger.error(f"Student creation failed for email: {email}")
                 return handle_response(
-                    message='Student creation failed',
+                    message='Crearea contului a esuat',
                     data=None,
                     status_code=HTTP_ERROR_CODE
                 )
@@ -240,7 +240,7 @@ def register_routes_student(app, session):
             if not student:
                 logger.warning(f"Student not found for ID: {student_id}")
                 return handle_response(
-                    message="Student not found",
+                    message="Nu a fost gasit un cont asociat acestui email",
                     status_code=HTTP_NOT_FOUND_CODE,
                     data=None
                 )

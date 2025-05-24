@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import './schedule.scss';
-import apiService from '../../../server/apiService';
+import apiService from '../../../api/server/apiService';
 import CalendarHeader from '../header/header';
 import CalendarToolbar from '../toolbar/toolbar';
 import MonthView from '../views//mothView/monthView';

@@ -53,6 +53,7 @@ class RoomTableColumns(Enum):
     ROOM_ID = "room_id"
     NAME = "name"
     LOCATION = "location"
+    GOOGLE_MAPS_URL = "google_maps_url"
 
 class CourseTableColumns(Enum):
     COURSE_ID = "course_id"

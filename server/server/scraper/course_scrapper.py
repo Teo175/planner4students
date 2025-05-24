@@ -122,7 +122,7 @@ class CourseScrapper:
             self.logger.warning("Numele sălii este gol. Se returnează None.")
             return None
 
-        room = self.roomRepository.get_room(sala)
+        room = self.roomRepository.get_room_by_name(sala)
 
         if room:
             self.logger.debug(f"Room găsită: {room.name}")
