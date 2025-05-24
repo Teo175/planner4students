@@ -1,9 +1,10 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./components/loginPage/loginPage";
-import Signup from "./components/signupPage/signupPage";
-import { ProtectedRoute } from "./server/protectedRoute";
+import { ProtectedRoute } from "./api/server/protectedRoute";
 import Schedule from "./components/dashboard/schedule/schedule";
 import EditProfile from "./components/editProfile/editProfile";
+import Signup from "./components/signupPage/signUpPage";
+import RoomMaps from "./components/roomMaps/roomMaps";
 
 
 function App() {
@@ -16,6 +17,9 @@ function App() {
         <Route path="/editProfile" element={<ProtectedRoute>
               <EditProfile/>
             </ProtectedRoute>} />
+        <Route path="/roomsMaps" element={<ProtectedRoute>
+        <RoomMaps/>
+        </ProtectedRoute>} />
         <Route 
           path="/schedule" 
           element={
@@ -24,7 +28,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Future routes would be added here*/}
       </Routes>
     </BrowserRouter>
   );

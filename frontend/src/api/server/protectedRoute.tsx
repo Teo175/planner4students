@@ -23,7 +23,6 @@ interface ProtectedRouteProps {
     const token = localStorage.getItem('authToken');
     if (!token) return true;
     
-    // Option 1: Parse JWT to check expiration (client-side)
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.exp * 1000 < Date.now();

@@ -14,7 +14,7 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    width: calc(100% - 15px); /* Scădem lățimea scrollbar-ului */
+    width: calc(100% - 4px); /* Scădem lățimea scrollbar-ului */
     padding-right: 15px; /* Adăugăm padding pentru a compensa scrollbar-ul */
     
     .header-cell {

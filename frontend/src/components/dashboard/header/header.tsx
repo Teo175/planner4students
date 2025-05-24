@@ -1,7 +1,7 @@
 import { Combobox, Option } from '@fluentui/react-components';
 import { Calendar, Edit, Menu, Plus, Save, Search, Undo, X, LogOut, User, Building2 } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
-import apiService from '../../../server/apiService';
+import apiService from '../../../api/server/apiService';
 import { useNavigate } from 'react-router-dom';
 
 const CalendarHeader = ({ 
@@ -81,8 +81,9 @@ const CalendarHeader = ({
       navigate('/editProfile');
     }
     else if(action == 'harta_sali'){
-      console.log('Harta salilor')
+      navigate('/roomsMaps');
     }
+    
   };
 
   // Închide meniul când se face click în afara lui
