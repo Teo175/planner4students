@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, ExternalLink, ArrowLeft } from 'lucide-react';
+import { Search, MapPin,  ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import apiService from '../../api/server/apiService';
 import { Room } from '../../common';
@@ -14,7 +14,6 @@ const RoomMaps: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingRooms, setIsLoadingRooms] = useState(true);
 
-  // Încarcă sălile de pe server
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -31,14 +30,11 @@ const RoomMaps: React.FC = () => {
 
     fetchRooms();
   }, []);
-
-  // Filtrarea sălilor pe baza termenului de căutare
   useEffect(() => {
     const filtered = apiService.searchRooms(allRooms, searchTerm);
     setFilteredRooms(filtered);
   }, [searchTerm, allRooms]);
 
-  // Funcția pentru deschiderea Google Maps
   const navigateToRoom = (room: Room) => {
     if (!room.google_maps_url) {
       return;
@@ -47,27 +43,79 @@ const RoomMaps: React.FC = () => {
     setIsLoading(true);
     setSelectedRoom(room);
     
-    // Simulăm un delay pentru UX mai bun
     setTimeout(() => {
       window.open(room.google_maps_url, '_blank');
       setIsLoading(false);
     }, 500);
   };
 
-  // Funcția pentru căutarea rapidă (Enter key)
+const getGoogleMapsUrlForRoom = (room: Room): string | null => {
+  const location = room.location?.toLowerCase() || '';
+
+  if (location.includes('ntt data')) {
+    return 'https://www.google.com/maps/place/NTT+DATA/@46.7756433,23.593346,18.7z/data=!4m6!3m5!1s0x47490ea773657215:0xd5a08ae7ed21e379!8m2!3d46.7756967!4d23.5941116!16s%2Fg%2F1tfs9mgs?entry=ttu';
+  }
+
+  if (location.includes('campus') || location.includes('str. t. mihali')) {
+    return 'https://www.google.com/maps/place/Facultatea+de+%C5%9Etiin%C5%A3e+Economice+%C5%9Fi+Gestiunea+Afacerilor/@46.7731783,23.6188191,17z/data=!3m1!4b1!4m6!3m5!1s0x47490c15a18e8af9:0xcc357d4dedcf12a0!8m2!3d46.7731747!4d23.621394!16s%2Fg%2F1yglpxyfs?entry=ttu';
+  }
+
+  if (
+    location.includes('clădirea centrală') ||
+    location.includes('cladirea centrala') ||
+    location.includes('str. m. kogălniceanu') ||
+    location.includes('str. m. kogalniceanu')
+  ) {
+    return 'https://www.google.com/maps/place/UBB+Facultatea+de+Istorie+%C8%99i+Filosofie/@46.7676174,23.5888777,17z/data=!3m1!4b1!4m6!3m5!1s0x47490c28706c8277:0x35848bac5458e3ca!8m2!3d46.7676138!4d23.5914526!16s%2Fg%2F1z0spl9w9?entry=ttu';
+  }
+
+  if (location.includes('fizică') || location.includes('fizica')) {
+    return 'https://www.google.com/maps/place/UBB+Facultatea+de+Fizic%C4%83/@46.7675632,23.5888434,17z/data=!3m1!4b1!4m6!3m5!1s0x47490c28706c8277:0x2bd129b166f01f51!8m2!3d46.7675596!4d23.5914183!16s%2Fg%2F1hc4yhzkm?entry=ttu';
+  }
+
+  if (
+    location.includes('str. ploiesti') ||
+    location.includes('mathematica') ||
+    location.includes('mathematicum')
+  ) {
+    return 'https://www.google.com/maps/place/Mathematica/@46.7763082,23.5945944,17z/data=!4m6!3m5!1s0x47490e9fec68af87:0x421b462ac259993!8m2!3d46.7765106!4d23.5950743!16s%2Fg%2F11c6ty4sql?entry=ttu';
+  }
+
+  if (
+    location.includes('str. cireșilor') ||
+    location.includes('str. ciresilor') ||
+    location.includes('observatorul astronomic')
+  ) {
+    return 'https://www.google.com/maps/place/Observatorul+Astronomic/@46.7579194,23.5840047,17z/data=!3m1!4b1!4m6!3m5!1s0x47490dd4bdea1097:0x2e061bcaad43ed42!8m2!3d46.7579158!4d23.5865796!16s%2Fg%2F1tf14nmb?entry=ttu';
+  }
+
+  if (location.includes('avram iancu')) {
+    return 'https://www.google.com/maps/place/Facultatea+de+Drept/@46.7664845,23.5872371,17z/data=!3m1!4b1!4m6!3m5!1s0x47490c28385b365f:0xf914bc2a41306978!8m2!3d46.7664809!4d23.589812!16s%2Fg%2F1v_z33cc?entry=ttu';
+  }
+
+  return null;
+};
+
+
+
+const navigateToLocation = (room: Room) => {
+  const url = getGoogleMapsUrlForRoom(room);
+  if (url) {
+    window.open(url, '_blank');
+  }
+};
+
   const handleQuickSearch = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && filteredRooms.length > 0) {
       navigateToRoom(filteredRooms[0]);
     }
   };
 
-  // Funcția pentru resetarea căutării
   const clearSearch = () => {
     setSearchTerm('');
     setSelectedRoom(null);
   };
 
-  // Funcția pentru navigarea înapoi la orar
   const handleBackToSchedule = () => {
     navigate('/schedule');
   };
@@ -168,13 +216,14 @@ const RoomMaps: React.FC = () => {
                 <div className="room-actions">
                   <button
                     className="navigate-button"
-                    onClick={() => navigateToRoom(room)}
-                    disabled={(isLoading && selectedRoom?.room_id === room.room_id) || !room.google_maps_url}
+                    title="Deschide Google Maps pentru a vedea locatia"
+                    disabled={!getGoogleMapsUrlForRoom(room)}
+                    onClick={() => navigateToLocation(room)}
                   >
                     {isLoading && selectedRoom?.room_id === room.room_id ? (
                       <div className="loading-spinner" />
                     ) : (
-                      <ExternalLink size={14} />
+                      <MapPin size={16} />
                     )}
                   </button>
                 </div>
@@ -186,7 +235,7 @@ const RoomMaps: React.FC = () => {
                 </div>
                 {!room.google_maps_url && (
                   <p className="room-description text-warning">
-                    Nu există URL Google Maps pentru această sală
+                    Nu există imagini pentru această sală
                   </p>
                 )}
               </div>

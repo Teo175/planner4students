@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect} from 'react';
 import './schedule.scss';
 import apiService from '../../../api/server/apiService';
 import CalendarHeader from '../header/header';
@@ -8,86 +8,150 @@ import WeekView from '../views/weekView/weekView';
 import DayView from '../views/dayView/dayView';
 import { formatCoursesToEvents } from '../utils/dateUtils';
 import Swal from 'sweetalert2';
+import { AcademicSchedule, Course, EventData } from '../../../common';
+
+interface UserData {
+  student_id: string;
+  subgroup_id: string;
+  [key: string]: any;
+}
+
+interface ApiResponse {
+  status: number;
+  message?: string;
+  data?: any;
+}
 
 const Schedule = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewType, setViewType] = useState('week');
-  const [courses, setCourses] = useState([]); 
-  const [originalFormattedCourses, setOriginalFormattedCourses] = useState([]); 
-  const [backendCourses, setBackendCourses] = useState([]); 
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [viewType, setViewType] = useState<'month' | 'week' | 'day'>('week');
+  const [courses, setCourses] = useState<EventData[]>([]); 
+  const [originalFormattedCourses, setOriginalFormattedCourses] = useState<EventData[]>([]); 
+  const [backendCourses, setBackendCourses] = useState<Course[]>([]); 
   
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
  
-  const [groupInfo, setGroupInfo] = useState({ group: null, subgroup: null });
-
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [academicSchedule, setAcademicSchedule] = useState(null);
-  const [addingCourses, setAddingCourses] = useState(false);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [academicSchedule, setAcademicSchedule] = useState<AcademicSchedule | null>(null);
+  const [addingCourses, setAddingCourses] = useState<boolean>(false);
   
-  // State-uri pentru cursurile disponibile
-  const [availableCourses, setAvailableCourses] = useState([]);
-  const [selectedCourseType, setSelectedCourseType] = useState('');
-  const [selectedCourseName, setSelectedCourseName] = useState('');
-  const [searchLoading, setSearchLoading] = useState(false);
+  const [availableCourses, setAvailableCourses] = useState<string[]>([]);
+  const [selectedCourseType, setSelectedCourseType] = useState<string>('');
+  const [selectedCourseName, setSelectedCourseName] = useState<string>('');
+  const [searchLoading, setSearchLoading] = useState<boolean>(false);
 
+  const [tempAddedCourses, setTempAddedCourses] = useState<EventData[]>([]);
+  const [possibleAddCourses, setPossibleAddCourses] = useState<EventData[]>([]);
 
-// Adaugă un nou state pentru a stoca cursurile temporare adăugate
-const [tempAddedCourses, setTempAddedCourses] = useState([]);
+  const checkSemesterStart = (academicData: AcademicSchedule): void => {
+    if (!academicData || !academicData.academic_periods) return;
 
-  const [possibleAddCourses, setPossibleAddCourses] = useState([]);
-  // Adaugă o nouă funcție pentru a obține structura anului academic
-  const fetchAcademicSchedule = async () => {
+    const today = new Date();
+   // const todayStr = today.toISOString().split('T')[0]; 
+    const todayStr = '2024-09-30';
+    
+    const allStartDates = academicData.academic_periods
+      .map(period => period.start_date)
+      .filter(date => date); 
+
+    const earliestDate = allStartDates.length > 0 
+      ? allStartDates.reduce((earliest, current) => current < earliest ? current : earliest)
+      : null;
+
+  
+    if (earliestDate && todayStr === earliestDate) {
+      const warningKey = `semester_warning_${todayStr}`;
+      const hasShownWarning = localStorage.getItem(warningKey);
+
+     if (!hasShownWarning) {
+        Swal.fire({
+          title: '🎓 Actualizare orar!',
+          html: `
+            <div style="text-align: left; margin: 20px 0;">
+              <p><strong>Astăzi orarul a fost actualizat!</strong></p>
+              <p><strong>Data: ${earliestDate}</strong></p>
+              <br>
+              <p>📅 <strong>Informație importantă:</strong></p>
+              <p>• Orarul a fost actualizat cu cursurile noi</p>
+              <p>• Cursurile tale pot fi diferite față de perioada anterioară</p>
+              <p>• Dacă nu vezi cursurile așteptate, acestea vor fi actualizate automat în câteva momente</p>
+              <br>
+              <p>💡 <strong>Ce poți face:</strong></p>
+              <p>• Verifică din nou orarul în câteva minute</p>
+              <p>• Reîncarcă pagina dacă cursurile nu apar</p>
+              <p>• Dacă persistă probleme, contactează administratorul</p>
+            </div>
+          `,
+          icon: 'info',
+          confirmButtonText: 'Am înțeles',
+          confirmButtonColor: '#28a745',
+          allowOutsideClick: false,
+          customClass: {
+            popup: 'semester-warning-popup'
+          }
+        });
+        localStorage.setItem(warningKey, 'true');
+      }
+    }
+  };
+
+  const fetchAcademicSchedule = async (): Promise<void> => {
     try {
       const scheduleData = await apiService.getAcademicSchedule();
-      setAcademicSchedule(scheduleData);
+      
+      if (scheduleData) {
+        setAcademicSchedule(scheduleData);
+        checkSemesterStart(scheduleData);
+      } else {
+        console.warn('Nu s-au putut încărca datele programului academic');
+      }
     } catch (err) {
       console.error('Error fetching academic schedule:', err);
     }
   };
   
-  // Funcție pentru a încărca informațiile despre grup
-  const fetchGroupInfo = async () => {
+  const fetchUniqueNameCourses = async (): Promise<void> => {
     try {
-      const result = await apiService.getUserSubgroupAndGroup();
-      setGroupInfo(result);
+      setSearchLoading(true);
+      const userDataFromStorage: UserData | null = apiService.getUserData();
+      
+      if (!userDataFromStorage?.subgroup_id) {
+        console.error('Subgroup ID not found in user data');
+        setAvailableCourses([]);
+        return;
+      }
+
+      const availableCoursesData = await apiService.getAvailableCourses(userDataFromStorage.subgroup_id);
+      
+      if (Array.isArray(availableCoursesData)) {
+        setAvailableCourses(availableCoursesData);
+      } else {
+        console.warn('Format neașteptat pentru cursurile disponibile');
+        setAvailableCourses([]);
+      }
     } catch (err) {
-      console.error('Error fetching group and subgroup info:', err);
+      console.error('Error fetching available courses:', err);
+      setAvailableCourses([]);
+      Swal.fire({
+        title: 'Eroare',
+        text: 'Nu s-au putut încărca cursurile disponibile.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#28a745'
+      });
+    } finally {
+      setSearchLoading(false);
     }
   };
 
-
- const fetchUniqueNameCourses = async () => {
-  try {
-    setSearchLoading(true);
-    const userDataFromStorage = apiService.getUserData();
+  const fetchCourses = async (): Promise<void> => {
+    const userDataFromStorage: UserData | null = apiService.getUserData();
     
-    if (!userDataFromStorage.subgroup_id) {
-      console.error('Subgroup ID not found in user data');
-      return;
-    }
-
-    const availableCoursesData = await apiService.getAvailableCourses(userDataFromStorage.subgroup_id);
-    setAvailableCourses(availableCoursesData);
-  } catch (err) {
-    console.error('Error fetching available courses:', err);
-    Swal.fire({
-      title: 'Eroare',
-      text: 'Nu s-au putut încărca cursurile disponibile.',
-      icon: 'error',
-      confirmButtonText: 'OK'
-    });
-  } finally {
-    setSearchLoading(false);
-  }
-};
-
-  // Funcție pentru a încărca cursurile
-  const fetchCourses = async () => {
-    const userDataFromStorage = apiService.getUserData();
-    
-    if (!userDataFromStorage.subgroup_id) {
-      console.error('Subgroup ID not found in user data');
+    if (!userDataFromStorage?.student_id) {
+      console.error('Student ID not found in user data');
+      setError('Nu s-au găsit informațiile utilizatorului');
+      setLoading(false);
       return;
     }
     
@@ -95,11 +159,17 @@ const [tempAddedCourses, setTempAddedCourses] = useState([]);
     try {
       const coursesData = await apiService.getCoursesByStudentId(userDataFromStorage.student_id);
       
-      setBackendCourses(coursesData);
-      const formattedEvents = formatCoursesToEvents(coursesData);
-      setCourses(formattedEvents);
-      setOriginalFormattedCourses(formattedEvents); // Salvăm și o copie pentru cancel
-      setError(null);
+      if (Array.isArray(coursesData)) {
+        setBackendCourses(coursesData);
+        const formattedEvents = formatCoursesToEvents(coursesData);
+        setCourses(formattedEvents);
+        setOriginalFormattedCourses(formattedEvents); 
+        setError(null);
+      } else {
+        console.warn('Format neașteptat pentru cursuri');
+        setCourses([]);
+        setBackendCourses([]);
+      }
     } catch (err) {
       console.error('Error fetching courses:', err);
       setError('Nu s-au putut încărca cursurile. Vă rugăm încercați din nou.');
@@ -108,24 +178,19 @@ const [tempAddedCourses, setTempAddedCourses] = useState([]);
     }
   };
 
-  // Funcție pentru ștergerea unui curs
-  const handleDeleteCourse = (courseId) => {
-    // Actualizăm atât cursurile formatate cât și cele pentru backend
+  const handleDeleteCourse = (courseId: string): void => {
     setCourses(prevCourses => prevCourses.filter(course => course.id !== courseId));
-    console.log(backendCourses);
     setBackendCourses(prevBackendCourses => 
       prevBackendCourses.filter(course => course.course_id !== courseId)
     );
   };
 
-  // Intrare în modul de editare
-  const toggleEditMode = () => {
-    // Salvăm o copie a cursurilor formatate pentru a putea reveni la ele
+  const toggleEditMode = (): void => {
     setOriginalFormattedCourses([...courses]);
     setIsEditMode(true);
   };
   
-  const undoSchedule = () => {
+  const undoSchedule = (): void => {
     Swal.fire({
       title: 'Confirmare',
       text: 'Ești sigur/a că vrei să revii la orarul inițial?',
@@ -133,82 +198,82 @@ const [tempAddedCourses, setTempAddedCourses] = useState([]);
       showCancelButton: true,
       confirmButtonText: 'Da',
       cancelButtonText: 'Nu',
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#dc3545',
       reverseButtons: true
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const userData = apiService.getUserData();
+          const userData: UserData | null = apiService.getUserData();
           
-          if (!userData || !userData.student_id) {
+          if (!userData?.student_id) {
             throw new Error('Nu s-au găsit date despre student');
           }
           
-          // Apelăm noua metodă pentru resetarea orarului
-          const response = await apiService.resetCourseSubscriptions(userData.student_id);
+          const response: ApiResponse = await apiService.resetCourseSubscriptions(userData.student_id);
           
-          // Verificăm dacă resetarea a avut succes
           if (response.status === 200) {
-            // Reîncărcăm cursurile pentru a avea datele actualizate
             await fetchCourses();
-            
-            Swal.fire(
-              'Resetat!',
-              'Orarul a fost resetat cu succes.',
-              'success'
-            );
+            Swal.fire({
+              title: 'Resetat!',
+              text: 'Orarul a fost resetat cu succes.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#28a745'
+            });
           } else {
-            Swal.fire(
-              'Eroare',
-              'Nu s-a putut reseta orarul: ' + (response.message || 'Eroare necunoscută'),
-              'error'
-            );
+            Swal.fire({
+              title: 'Eroare',
+              text: 'Nu s-a putut reseta orarul: ' + (response.message || 'Eroare necunoscută'),
+              icon: 'error',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#28a745'
+            });
           }
         } catch (error) {
           console.error('Eroare la resetarea orarului:', error);
-          Swal.fire(
-            'Eroare',
-            'A apărut o eroare la resetarea orarului. Vă rugăm încercați din nou.',
-            'error'
-          );
+          Swal.fire({
+            title: 'Eroare',
+            text: 'A apărut o eroare la resetarea orarului. Vă rugăm încercați din nou.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#28a745'
+          });
         }
       }
     });
   };
   
-  // Salvare modificări
-  const saveChanges = async () => {
+  const saveChanges = async (): Promise<void> => {
     try {
-      const userData = apiService.getUserData();
+      const userData: UserData | null = apiService.getUserData();
       
-      if (!userData || !userData.student_id) {
+      if (!userData?.student_id) {
         throw new Error('Nu s-au găsit date despre student');
       }
       
-      // Trimitem lista actualizată de cursuri către backend
-      const response = await apiService.updateCourseSubscriptions(
+      const response: ApiResponse = await apiService.updateCourseSubscriptions(
         userData.student_id, 
         backendCourses
       );
       
-      // Verificăm dacă actualizarea a avut succes
       if (response.status === 200) {
-        // Reîncărcăm cursurile pentru a avea datele actualizate
         await fetchCourses();
         
-        // Afișăm mesaj de succes cu SweetAlert2
         Swal.fire({
           title: 'Succes!',
           text: 'Orarul a fost actualizat cu succes.',
           icon: 'success',
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#28a745'
         });
       } else {
-        // Afișăm mesaj de eroare cu SweetAlert2
         Swal.fire({
           title: 'Eroare',
           text: 'Nu s-a putut actualiza orarul: ' + (response.message || 'Eroare necunoscută'),
           icon: 'error',
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#28a745'
         }).then(() => {
           window.location.reload();
         });
@@ -216,12 +281,12 @@ const [tempAddedCourses, setTempAddedCourses] = useState([]);
     } catch (error) {
       console.error('Eroare la salvarea orarului:', error);
       
-      // Afișăm mesaj de eroare cu SweetAlert2
       Swal.fire({
         title: 'Eroare',
         text: 'A apărut o eroare la salvarea modificărilor. Vă rugăm încercați din nou.',
         icon: 'error',
-        confirmButtonText: 'OK'
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#28a745'
       }).then(() => {
         window.location.reload();
       });
@@ -230,223 +295,188 @@ const [tempAddedCourses, setTempAddedCourses] = useState([]);
     }
   };
   
-  // Anulare modificări
-  const cancelEdit = () => {
-    // Restaurăm versiunea originală a cursurilor formatate
+  const cancelEdit = (): void => {
     setCourses([...originalFormattedCourses]);
     setIsEditMode(false);
   };
  
-  const handleAddCourse = () => {
+  const handleAddCourse = (): void => {
     setAddingCourses(true);
-    // Încărcăm cursurile disponibile când intrăm în modul de adăugare
     fetchUniqueNameCourses();
   };
   
-  // const cancelAddCourse = () => {
-  //   setAddingCourses(false);
-  //   // Resetăm state-urile pentru combobox-uri
-  //   setSelectedCourseType('');
-  //   setSelectedCourseName('');
-  //   setPossibleAddCourses([]);
-  // };
-  
-  // Funcția pentru gestionarea selecției tipului de curs
-  const handleCourseTypeChange = (courseType) => {
+  const handleCourseTypeChange = (courseType: string): void => {
     setSelectedCourseType(courseType);
   };
   
-  // Funcția pentru selectarea unui curs din combobox
-  const handleCourseNameChange = (courseName) => {
+  const handleCourseNameChange = (courseName: string): void => {
     setSelectedCourseName(courseName);
   };
 
- const handleSearchCourses = async () => {
-  try {
-    setSearchLoading(true);
-    const userData = apiService.getUserData();
-      
-    if (!userData || !userData.student_id) {
-      throw new Error('Nu s-au găsit date despre student');
-    }
-    
-    if (selectedCourseName && selectedCourseType) {
-      console.log(`Căutare pentru: Curs=${selectedCourseName}, Tip=${selectedCourseType}`);
-      
-      const coursesData = await apiService.getWantedCourses(selectedCourseName, selectedCourseType, userData.subgroup_id);
-      console.log(coursesData);
-      
-      if (coursesData && coursesData.length > 0) {
-        const formattedPossibleCourses = formatCoursesToEvents(coursesData);
-        console.log(formattedPossibleCourses);
+  const handleSearchCourses = async (): Promise<void> => {
+    try {
+      setSearchLoading(true);
+      const userData: UserData | null = apiService.getUserData();
         
-        // Filtram cursurile pentru a elimina cele care există deja în orar
-        const filteredCourses = formattedPossibleCourses.filter(possibleCourse => 
-          !courses.some(existingCourse => existingCourse.id === possibleCourse.id)
-        );
+      if (!userData?.student_id || !userData?.subgroup_id) {
+        throw new Error('Nu s-au găsit date despre student');
+      }
+      
+      if (selectedCourseName && selectedCourseType) {
+        console.log(`Căutare pentru: Curs=${selectedCourseName}, Tip=${selectedCourseType}`);
         
-        // Verifică dacă există cursuri după filtrare
-        if (filteredCourses.length > 0) {
-          // Actualizăm state-ul cu cursurile găsite și filtrate
-          setPossibleAddCourses(filteredCourses);
+        const coursesData = await apiService.getWantedCourses(selectedCourseName, selectedCourseType, userData.subgroup_id);
+
+        
+        if (Array.isArray(coursesData) && coursesData.length > 0) {
+          const formattedPossibleCourses = formatCoursesToEvents(coursesData);
+         
+          const filteredCourses = formattedPossibleCourses.filter(possibleCourse => 
+            !courses.some(existingCourse => existingCourse.id === possibleCourse.id)
+          );
           
-          
+          if (filteredCourses.length > 0) {
+            setPossibleAddCourses(filteredCourses);
+          } else {
+            setPossibleAddCourses([]); 
+            
+            Swal.fire({
+              title: 'Informație',
+              text: 'Nu sunt alte sloturi disponibile pentru acest tip de căutare. Toate cursurile găsite există deja în orarul tău.',
+              icon: 'info',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#28a745'
+            });
+          }
         } else {
-          // Dacă toate cursurile găsite există deja în orar
-          setPossibleAddCourses([]); // Resetăm array-ul pentru siguranță
+          setPossibleAddCourses([]);
           
           Swal.fire({
             title: 'Informație',
-            text: 'Nu sunt alte sloturi disponibile pentru acest tip de căutare. Toate cursurile găsite există deja în orarul tău.',
+            text: 'Nu au fost găsite cursuri care să corespundă criteriilor selectate.',
             icon: 'info',
-            confirmButtonText: 'OK'
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#28a745'
           });
         }
-      } else {
-        // Dacă nu s-au găsit cursuri de la server
-        setPossibleAddCourses([]);
-        
-        Swal.fire({
-          title: 'Informație',
-          text: 'Nu au fost găsite cursuri care să corespundă criteriilor selectate.',
-          icon: 'info',
-          confirmButtonText: 'OK'
-        });
       }
-    }
-  } catch (error) {
-    console.error('Eroare la căutarea cursurilor:', error);
-    setPossibleAddCourses([]);
-    
-    Swal.fire({
-      title: 'Eroare',
-      text: 'A apărut o eroare la căutarea cursurilor. Vă rugăm încercați din nou.',
-      icon: 'error',
-      confirmButtonText: 'OK'
-    });
-  } finally {
-    setSearchLoading(false);
-  }
-};
-
-
-  useEffect(() => {
-    fetchGroupInfo();
-    fetchCourses();
-    fetchAcademicSchedule(); 
-  }, []);
-
-
-  // Funcție pentru adăugarea cursurilor în mod temporar
-const handleAddCourseToSchedule = (course_id) => {
-  // Găsim cursul pe care vrem să-l adăugăm
-  const courseToAdd = possibleAddCourses.find(course => course.id === course_id);
-  
-  if (!courseToAdd) {
-    console.error("Cursul cu ID-ul", course_id, "nu a fost găsit în possibleAddCourses");
-    return;
-  }
-  
-  // Adăugăm cursul la lista temporară
-  setTempAddedCourses(prev => [...prev, courseToAdd]);
-
-  // Eliminăm cursul din lista de posibile adăugări
-  setPossibleAddCourses(prev => prev.filter(c => c.id !== course_id));
-};
-const saveAddedCourses = async () => {
-  try {
-    // Adăugăm cursurile temporare la cursurile existente
-    setCourses(prev => [...prev, ...tempAddedCourses]);
-    
-    // Transformăm cursurile temporare în formatul pentru backend
-    const backendCoursesToAdd = tempAddedCourses.map(course => ({
-      course_id: course.id,
-      name: course.title,
-      course_type: course.courseType,
-      day: course.day,
-      start_time: `${String(course.startHour).padStart(2, '0')}:${String(course.startMinute).padStart(2, '0')}:00`,
-      end_time: `${String(course.endHour).padStart(2, '0')}:${String(course.endMinute).padStart(2, '0')}:00`,
-      professor_id: course.professor_id,
-      room_id: course.room_id,
-      professor_name: course.professor_name,
-      room_name: course.room_name,
-      study_year_id: course.study_year_id,
-      group_id: course.group_id,
-      subgroup_id: course.subgroup_id,
-      frequency: course.frequency || 0
-    }));
-    
-    // Adăugăm la backendCourses
-    setBackendCourses(prev => [...prev, ...backendCoursesToAdd]);
-    
-    // Trimitem lista actualizată către backend
-    const userData = apiService.getUserData();
-    
-    if (!userData || !userData.student_id) {
-      throw new Error('Nu s-au găsit date despre student');
-    }
-    
-    const updatedBackendCourses = [...backendCourses, ...backendCoursesToAdd];
-    
-    const response = await apiService.updateCourseSubscriptions(
-      userData.student_id, 
-      updatedBackendCourses
-    );
-    
-    if (response.status === 200) {
-      // Reîncărcăm cursurile pentru a avea datele actualizate
-      await fetchCourses();
-      
-      // Afișăm mesaj de succes
-      Swal.fire({
-        title: 'Succes!',
-        text: 'Cursurile au fost adăugate în orarul tău.',
-        icon: 'success',
-        confirmButtonText: 'OK'
-      });
-      
-      // Resetăm state-urile pentru adăugarea de cursuri
-      setTempAddedCourses([]);
+    } catch (error) {
+      console.error('Eroare la căutarea cursurilor:', error);
       setPossibleAddCourses([]);
-      setAddingCourses(false);
-      setSelectedCourseName('');
-      setSelectedCourseType('');
-    } else {
-      throw new Error(response.message || 'Eroare necunoscută');
+      
+      Swal.fire({
+        title: 'Eroare',
+        text: 'A apărut o eroare la căutarea cursurilor. Vă rugăm încercați din nou.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#28a745'
+      });
+    } finally {
+      setSearchLoading(false);
     }
-  } catch (error) {
-    console.error('Eroare la salvarea cursurilor:', error);
-    
-    Swal.fire({
-      title: 'Eroare',
-      text: 'A apărut o eroare la salvarea cursurilor. Vă rugăm încercați din nou.',
-      icon: 'error',
-      confirmButtonText: 'OK'
-    });
-  }
-};
-
-// Modifică funcția cancelAddCourse pentru a reseta și cursurile temporare
-const cancelAddCourses = () => {
-  setAddingCourses(false);
-  // Resetăm state-urile pentru combobox-uri
-  setSelectedCourseType('');
-  setSelectedCourseName('');
-  setPossibleAddCourses([]);
-  // Resetăm cursurile temporare adăugate
-  setTempAddedCourses([]);
-  setTempAddedBackendCourses([]);
-};
-
-  const getHeaderTitle = () => {
-    if (groupInfo.group && groupInfo.subgroup) {
-      return `Orarul grupei ${groupInfo.group.group_number}, semigrupa: ${groupInfo.subgroup.subgroup_number}`;
-    }
-    return "Orar";
   };
 
-  // Navigare calendar
-  const goToPrevious = () => {
+  useEffect(() => {
+    const initializeData = async (): Promise<void> => {
+      await fetchAcademicSchedule(); 
+      await fetchCourses();
+    };
+
+    initializeData();
+  }, []);
+
+  const handleAddCourseToSchedule = (course_id: string): void => {
+    const courseToAdd = possibleAddCourses.find(course => course.id === course_id);
+    
+    if (!courseToAdd) {
+      console.error("Cursul cu ID-ul", course_id, "nu a fost găsit în possibleAddCourses");
+      return;
+    }
+    
+    setTempAddedCourses(prev => [...prev, courseToAdd]);
+
+    setPossibleAddCourses(prev => prev.filter(c => c.id !== course_id));
+  };
+
+  const saveAddedCourses = async (): Promise<void> => {
+    try {
+      setCourses(prev => [...prev, ...tempAddedCourses]);
+      
+      const backendCoursesToAdd: Course[] = tempAddedCourses.map(course => ({
+        course_id: course.id,
+        name: course.title,
+        course_type: course.courseType,
+        day: course.day || '',
+        start_time: `${String(course.startHour).padStart(2, '0')}:${String(course.startMinute).padStart(2, '0')}:00`,
+        end_time: `${String(course.endHour).padStart(2, '0')}:${String(course.endMinute).padStart(2, '0')}:00`,
+        professor_id: (course as any).professor_id || '',
+        room_id: (course as any).room_id || null,
+        professor_name: course.professor_name || '',
+        room_name: course.room_name || '',
+        study_year_id: (course as any).study_year_id || '',
+        group_id: (course as any).group_id || null,
+        subgroup_id: (course as any).subgroup_id || null,
+        frequency: (course as any).frequency || 0,
+        student_count: course.student_count || 0
+      }));
+      
+      setBackendCourses(prev => [...prev, ...backendCoursesToAdd]);
+      
+      const userData: UserData | null = apiService.getUserData();
+      
+      if (!userData?.student_id) {
+        throw new Error('Nu s-au găsit date despre student');
+      }
+      
+      const updatedBackendCourses = [...backendCourses, ...backendCoursesToAdd];
+      
+      const response: ApiResponse = await apiService.updateCourseSubscriptions(
+        userData.student_id, 
+        updatedBackendCourses
+      );
+      
+      if (response.status === 200) {
+        await fetchCourses();
+        
+        Swal.fire({
+          title: 'Succes!',
+          text: 'Cursurile au fost adăugate în orarul tău.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#28a745'
+        });
+        
+        setTempAddedCourses([]);
+        setPossibleAddCourses([]);
+        setAddingCourses(false);
+        setSelectedCourseName('');
+        setSelectedCourseType('');
+      } else {
+        throw new Error(response.message || 'Eroare necunoscută');
+      }
+    } catch (error) {
+      console.error('Eroare la salvarea cursurilor:', error);
+      
+      Swal.fire({
+        title: 'Eroare',
+        text: 'A apărut o eroare la salvarea cursurilor. Vă rugăm încercați din nou.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#28a745'
+      });
+    }
+  };
+
+  const cancelAddCourses = (): void => {
+    setAddingCourses(false);
+    setSelectedCourseType('');
+    setSelectedCourseName('');
+    setPossibleAddCourses([]);
+    setTempAddedCourses([]);
+  };
+
+  
+  const goToPrevious = (): void => {
     const newDate = new Date(currentDate);
     if (viewType === 'month') {
       newDate.setMonth(newDate.getMonth() - 1);
@@ -458,7 +488,7 @@ const cancelAddCourses = () => {
     setCurrentDate(newDate);
   };
   
-  const goToNext = () => {
+  const goToNext = (): void => {
     const newDate = new Date(currentDate);
     if (viewType === 'month') {
       newDate.setMonth(newDate.getMonth() + 1);
@@ -470,7 +500,7 @@ const cancelAddCourses = () => {
     setCurrentDate(newDate);
   };
   
-  const goToToday = () => {
+  const goToToday = (): void => {
     setCurrentDate(new Date());
   };
   
@@ -485,8 +515,7 @@ const cancelAddCourses = () => {
   return (
     <div className="calendar-container">
       {/* Header */}
-      <CalendarHeader 
-        title={getHeaderTitle()} 
+      <CalendarHeader  
         isWeekView={viewType === "week"}
         isEditMode={isEditMode}
         isAddingCourses={addingCourses}

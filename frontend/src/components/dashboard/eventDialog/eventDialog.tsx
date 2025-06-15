@@ -1,9 +1,11 @@
 import React from 'react';
 import './eventDialog.scss';
 import DayView from '../views/dayView/dayView';
+import { EventDialogProps } from '../../../common';
 
-const EventDialog = ({ isOpen, onClose, date, courses, academicSchedule}) => {
-  if (!isOpen) return null;
+
+const EventDialog: React.FC<EventDialogProps> = ({ isOpen, onClose, date, courses, academicSchedule }) => {
+  if (!isOpen || !date) return null;
 
   return (
     <div className="event-dialog-overlay">

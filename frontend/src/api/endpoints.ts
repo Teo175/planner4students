@@ -28,3 +28,10 @@ export const GET_ACADEMIC_SCHEDULE_ENDPOINT = (subgroupId: string) => `/schedule
 
 // ============ ROOM ENDPOINTS ============
 export const GET_ROOMS_ENDPOINT = '/rooms';
+
+// ============ PROFESSORS ENDPOINTS ============
+export const PROFESSORS_ENDPOINT = (department: string) =>
+  `/professors?department=${encodeURIComponent(department)}`;
+
+// ============ CHATBOT ENDPOINTS ============
+export const CHATBOT_ENDPOINT = '/chat';

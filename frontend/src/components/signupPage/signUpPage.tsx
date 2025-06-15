@@ -5,7 +5,6 @@ import './signupPage.scss';
 import apiService from "../../api/server/apiService";
 import { StudyYear, Specialization, Group, Subgroup } from "../../common";
 import {
-  SIGNUP_TITLE,
   SIGNUP_ALL_FIELDS_REQUIRED,
   SIGNUP_FAILED_ERROR,
   SIGNUP_NETWORK_ERROR,
@@ -52,6 +51,9 @@ const Signup = () => {
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [selectedSubgroupNumber, setSelectedSubgroupNumber] = useState<number | null>(null);
   const [selectedSubgroupId, setSelectedSubgroupId] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
   const navigate = useNavigate();
 
   const [studyOptions, setStudyOptions] = useState<string[]>([]);
@@ -68,6 +70,39 @@ const Signup = () => {
   const [filteredGroupOptions, setFilteredGroupOptions] = useState<{id: string, number: number}[]>([]);
   const [filteredSubgroupOptions, setFilteredSubgroupOptions] = useState<{id: string, number: number}[]>([]);
 
+  const validateEmail = (email: string): boolean => {
+    if (!email) {
+      setEmailError("Email-ul este obligatoriu");
+      return false;
+    }
+    if (!email.endsWith('@stud.ubbcluj.ro')) {
+      setEmailError("Adresa de email trebuie să fie de forma @stud.ubbcluj.ro");
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
+
+  const validatePassword = (password: string): boolean => {
+    if (!password) {
+      setPasswordError("Parola este obligatorie");
+      return false;
+    }
+
+    const minLength = password.length >= 8;
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+
+    if (!minLength || !hasLowerCase || !hasUpperCase || !hasDigit || !hasSpecialChar) {
+      setPasswordError("Parola trebuie să conțină minim 8 caractere, o literă mică, o literă mare, o cifră și un caracter special");
+      return false;
+    }
+
+    setPasswordError('');
+    return true;
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -181,13 +216,22 @@ const Signup = () => {
   };
 
   const handleSubmit = async () => {
-    if (!firstName || !lastName || !email || !password || 
-        !selectedStudyField || !selectedLanguage || 
-        !selectedYear || !selectedGroupNumber || !selectedSubgroupNumber) {
-      setError(SIGNUP_ALL_FIELDS_REQUIRED);
-      return;
-    }
+    setError('');
+    setEmailError('');
+    setPasswordError('');
 
+    const isEmailValid = validateEmail(email);
+    const isPasswordValid = validatePassword(password);
+
+   
+      if (!firstName || !lastName || !email || !password || 
+          !selectedStudyField || !selectedLanguage || 
+          !selectedYear || !selectedGroupNumber || !selectedSubgroupNumber) {
+        setError(SIGNUP_ALL_FIELDS_REQUIRED);
+        return;
+      }
+    if (!isEmailValid || !isPasswordValid) return;
+   
     const userData = {
       first_name: firstName,
       last_name: lastName,
@@ -220,9 +264,18 @@ const Signup = () => {
   };
 
   return (
+     <div className="signup-wrapper">
+    <div className="video-container">
+      <video autoPlay loop muted playsInline>
+        <source src="videos/robot-intro.mp4" type="video/mp4" />
+      </video>
+    </div>
     <div className="signup-container">
+        <div className="form-header">
+          <img src="images/finalogo.png" alt="Planner 4 Students" className="form-logo" />
+        </div>
       <div className="signup-form">
-        <p>{SIGNUP_TITLE}</p>
+       
         {error && <p className="error-message">{error}</p>}
         
         <div className="form-row">
@@ -241,22 +294,32 @@ const Signup = () => {
             />
           </Field>
         </div>
-        <div>
+        <div className="form-row-account">
           <Field label={SIGNUP_EMAIL_LABEL} className="field-container">
             <Input 
               placeholder={SIGNUP_EMAIL_PLACEHOLDER} 
               value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
+               onChange={(e) => {
+                setEmail(e.target.value);
+                if (emailError) validateEmail(e.target.value);
+              }}
+              className={emailError ? 'input-error' : ''}
             />
+            {emailError && <p className="field-error" title={emailError}>{emailError}</p>}
           </Field>
           <Field label={SIGNUP_PASSWORD_LABEL} className="field-container">
             <Input 
               type="password" 
               placeholder={SIGNUP_PASSWORD_PLACEHOLDER} 
               value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (passwordError) validatePassword(e.target.value);
+              }}
+              className={passwordError ? 'input-error' : ''}
             />
-          </Field>
+            {passwordError && <p className="field-error" title={passwordError}>{passwordError}</p>}
+        </Field>
         </div>
         <div className="selection-container">
           <Combobox 
@@ -334,6 +397,7 @@ const Signup = () => {
         <Button onClick={handleSubmit} disabled={loading}>{SIGNUP_BUTTON_TEXT}</Button>
         <p>{SIGNUP_ALREADY_HAVE_ACCOUNT}<Link to="/login">{SIGNUP_LOGIN_LINK_TEXT}</Link></p>
       </div>
+    </div>
     </div>
   );
 };

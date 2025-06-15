@@ -9,29 +9,17 @@ from server.services.study_year_service import StudyYearService
 
 subgroups_bp = Blueprint('subgroups', __name__)
 logger = setup_logger(__name__)
-def register_routes_subgroup(app, session):
-    """
-    Function that registers all the routes for the subgroup requests.
-    Includes proper error handling and logging throughout the process.
 
-    Args:
-        app: Flask application instance
-        session: Database session
-    """
-    logger.info("Registering subgroup routes")
-    group_service = GroupService(session)
-    study_year_service = StudyYearService(session)
-    subgroup_service = SubgroupService(session)
-    group_service = GroupService(session)
+def register_routes_subgroup(app, Session):
+    logger.info("Inregistrare rute pentru subgrupe")
 
     @subgroups_bp.route('/subgroups', methods=['GET'])
     def get_all_subgroups():
-        """Endpoint to get all subgroups"""
+        session = Session()
         try:
-            # Get all subgroups from the service
+            subgroup_service = SubgroupService(session)
             subgroups = subgroup_service.get_all_subgroups()
 
-            # Serialize the subgroups
             serialized_subgroups = [
                 {
                     "subgroup_id": subgroup.subgroup_id,
@@ -41,9 +29,8 @@ def register_routes_subgroup(app, session):
                 for subgroup in subgroups
             ]
 
-            logger.info(f"Retrieved {len(serialized_subgroups)} subgroups")
+            logger.info(f"S-au preluat {len(serialized_subgroups)} subgrupe")
 
-            # Return the response
             return handle_response(
                 message=DATA_MESSAGE,
                 data=serialized_subgroups,
@@ -51,11 +38,13 @@ def register_routes_subgroup(app, session):
             )
 
         except Exception as e:
-            logger.error(f"Error retrieving subgroups: {str(e)}")
+            logger.error(f"Eroare la preluarea subgrupelor: {str(e)}")
             return handle_response(
-                message=f"Failed to retrieve subgroups: {str(e)}",
+                message=f"Nu s-au putut prelua subgrupele: {str(e)}",
                 status_code=HTTP_ERROR_CODE
             )
+        finally:
+            session.close()
 
     app.register_blueprint(subgroups_bp)
-    logger.info("subgroup routes registered successfully")
+    logger.info("Rutele pentru subgrupe au fost inregistrate cu succes")

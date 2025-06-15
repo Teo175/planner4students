@@ -1,4 +1,3 @@
-// Simple variables
 $primary: #4285F4;
 $secondary: #0F9D58;
 $error: #DB4437;
@@ -11,41 +10,35 @@ $gray: #f1f3f4;
 $radius: 8px;
 $shadow: 0 2px 8px rgba(0,0,0,0.1);
 
-// Base reset
 * { 
   box-sizing: border-box;
 }
 
-// Full page layout
 .profile-page {
   width: 100vw;
-  min-height: 100vh;
+  height: 100vh; // Changed from min-height to height
   background: $bg;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow: hidden; // Prevent page-level scrolling
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
 }
 
 .edit-profile-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  min-height: 100vh;
-  padding: 32px;
-  background: $bg;
-}
-
-// Content wrapper with scroll
-.profile-content {
-  width: 100%;
-  margin: 0;
-  background: $card;
-  border-radius: $radius;
-  box-shadow: $shadow;
-  border: 1px solid $border;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 64px);
+}
+
+.profile-content {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: $card;
+  display: flex;
+  flex-direction: column;
 }
 
 // Fixed header
@@ -53,6 +46,7 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
   padding: 32px;
   border-bottom: 1px solid $border;
   background: $card;
+  flex-shrink: 0; // Prevent header from shrinking
 
   .header-title-container {
     display: flex;
@@ -73,6 +67,7 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
+  min-height: 0; // Important for flex children to be scrollable
 }
 
 // Back button
@@ -111,6 +106,38 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
   border: none;
 }
 
+// Additional button styles
+.save-button {
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 50%;
+  
+  &:hover {
+    background-color: #3e8e41;
+  }
+}
+
+.button-disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  background-color: #a9a9a9 !important;
+  
+  &:hover {
+    background-color: #a9a9a9 !important;
+  }
+}
+
+.cancel-add-button, 
+.save-add-button {
+  background-color: #f44336;
+  color: white;
+  border-radius: 50%;
+  
+  &:hover {
+    background-color: #d32f2f;
+  }
+}
+
 .edit-mode-button {
   background: $primary;
   color: white;
@@ -125,25 +152,31 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .save-edit-button {
-  background: $secondary;
+  background: #4CAF50;
   color: white;
   
   &:hover:not(:disabled) { 
-    background: #0b7043; 
+    background: #3e8e41; 
   }
   
   &:disabled { 
-    opacity: 0.6; 
+    opacity: 0.6;
+    background: #a9a9a9 !important;
+    cursor: not-allowed;
+    
+    &:hover {
+      background: #a9a9a9 !important;
+    }
   }
 }
 
 .cancel-edit-button {
-  background: $card;
-  color: $text-light;
-  border: 2px solid $text-light;
+  background: #f44336;
+  color: white;
+  border: none;
   
   &:hover { 
-    background: $text-light;
+    background: #d32f2f;
     color: white;
   }
 }
@@ -158,7 +191,13 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
   padding: 32px;
   border-bottom: 1px solid $border;
   background: $card;
-
+  label {
+      display: block;
+      padding-left: 2px;
+      margin-bottom: 8px;
+      color: grey;
+      font-weight: 400;
+    }
   &:last-child { 
     border-bottom: none; 
   }
@@ -167,7 +206,7 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
     margin: 0 0 24px 0;
     color: $text;
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 550;
     padding-bottom: 8px;
     border-bottom: 2px solid $border;
   }
@@ -189,12 +228,11 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
   label {
     display: block;
     margin-bottom: 8px;
-    color: $text;
-    font-weight: 600;
+    color: grey;
+    font-weight: 400;
   }
 }
 
-// Regular inputs
 .name-input, 
 .email-input {
   width: 100%;
@@ -268,40 +306,146 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 }
 
-// Dropdown options
-[role="listbox"] {
-  border: 2px solid $primary;
-  border-radius: $radius;
-  box-shadow: $shadow;
-  background: $card;
+// Signup-style dropdown containers
+.selection-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
+
+  .combobox {
+    width: 100%;
+    height: 44px;
+    border: 2px solid #e8eaed;
+    border-radius: 6px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    position: relative;
+   // background-color:#f1f3f4;
+   
+      &.combobox-edit-mode {
+      background-color: #ffffff;
+    }
+    
+    &.combobox-view-mode {
+      background-color: #f1f3f4;
+    }
+    &:focus {
+      border-color: $primary;
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: #f5f5f5;
+      border-color: #ddd;
+      cursor: not-allowed;
+    }
+
+    // Custom arrow for regular combobox
+    &::after {
+      content: '▼';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: $text-light;
+      font-size: 12px;
+      z-index: 100;
+    }
+  }
+}
+
+.combobox2 {
+  flex: 1 1 48%;
+  min-width: 200px;
+  height: 44px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  position: relative;
+
+  &:focus {
+    border-color: $primary;
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    border-color: #ddd;
+    cursor: not-allowed;
+  }
+
+  // Custom arrow for combobox2
+  &::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: $text-light;
+    font-size: 12px;
+    z-index: 100;
+  }
+}
+
+.combobox {
   width: 100%;
-  z-index: 1000;
-  margin-top: 2px;
-}
-
-[role="option"] {
-  padding: 12px 16px;
+  height: 44px;
+  padding: 0 12px;
+  border: 2px solid $border;
+  border-radius: $radius;
+  background-color: $card;
   color: $text;
-  cursor: pointer;
+  font-size: 1rem;
+  position: relative;
 
-  &:hover {
-    background: rgba(66,133,244,0.05);
+  &:focus-within {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.2);
   }
 
-  &[aria-selected="true"] {
-    background: rgba(66,133,244,0.1);
-    color: $primary;
-    font-weight: 600;
+  &::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-light;
+    font-size: 12px;
+    pointer-events: none;
+  }
+
+  input {
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    font-size: inherit;
+    color: inherit;
   }
 }
 
-// Messages
-.message {
-  margin: 20px 32px;
-  padding: 16px 20px;
+@media (max-width: 768px) {
+  .combobox {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+
+.message-container {
+  margin: 10px 22px;
+  padding: 16px 10px;
   border-radius: $radius;
   font-weight: 500;
-  border-left: 4px solid;
+  flex-shrink: 0;
 
   &.success {
     background: rgba(15,157,88,0.1);
@@ -335,28 +479,39 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
   color: $text-light;
 }
 
-// Custom scrollbar
+// Enhanced scrollbar styling
 .form-sections-container::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
 }
 
 .form-sections-container::-webkit-scrollbar-track {
   background: $gray;
+  border-radius: 6px;
 }
 
 .form-sections-container::-webkit-scrollbar-thumb {
   background: $primary;
-  border-radius: 4px;
+  border-radius: 6px;
+  border: 2px solid $gray;
 
   &:hover {
     background: #3367d6;
   }
 }
 
+// Scrollbar for Firefox
+.form-sections-container {
+  scrollbar-width: thin;
+}
+
 // Mobile responsive
 @media (max-width: 768px) {
+  .profile-page {
+    height: 100vh; // Maintain full height on mobile
+  }
+
   .edit-profile-container {
-    padding: 16px;
+    padding: 0; // Remove padding on mobile
   }
 
   .profile-header {
@@ -375,7 +530,7 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
 
   .form-row {
     flex-direction: column;
-    gap: 0;
+    gap: 10px;
   }
 
   .edit-mode-actions {
@@ -397,82 +552,17 @@ $shadow: 0 2px 8px rgba(0,0,0,0.1);
   .message {
     margin: 16px;
   }
-}
 
-// Dark mode
-@media (prefers-color-scheme: dark) {
-  .profile-page { 
-    background: #121212; 
-  }
-  
-  .edit-profile-container,
-  .profile-content,
-  .form-section,
-  .profile-header { 
-    background: #1e1e1e;
-    color: #e8eaed;
-  }
-
-  .loading-container {
-    background: #1e1e1e;
-    color: #e8eaed;
-  }
-  
-  .form-group {
-    label { 
-      color: #e8eaed; 
-    }
-  }
-    
-  .name-input, 
-  .email-input {
-    background: #1e1e1e;
-    border-color: #3c4043;
-    color: #e8eaed;
-    
-    &:disabled {
-      background: #2d2d2d;
-      color: #9aa0a6;
-    }
-  }
-  
-  .combobox-edit {
-    input,
-    [role="combobox"] {
-      background: #1e1e1e;
-      border-color: #3c4043;
-      color: #e8eaed;
-      
-      &:disabled {
-        background: #2d2d2d;
-        color: #9aa0a6;
-      }
-    }
-
-    &::after {
-      color: #9aa0a6;
-    }
-  }
-    
-  [role="listbox"] {
-    background: #1e1e1e;
-    border-color: $primary;
-  }
-    
-  [role="option"] {
-    color: #e8eaed;
-    
-    &:hover {
-      background: rgba(66,133,244,0.1);
-    }
-
-    &[aria-selected="true"] {
-      background: rgba(66,133,244,0.2);
-      color: $primary;
+  // Mobile styles for new dropdown classes
+  .selection-container {
+    .combobox {
+      min-width: unset;
     }
   }
 
-  .form-sections-container::-webkit-scrollbar-track {
-    background: #2d2d2d;
+  .combobox2 {
+    width: 100%;
+    min-width: unset;
+    flex: 1 1 100%;
   }
 }

@@ -43,3 +43,6 @@ class StudentCoursesService:
 
     def get_all_courses_for_a_student(self, student_id:UUID) -> list[Course]:
         return self.studentCourses.get_all_courses_for_a_student(student_id)
+
+    def get_no_students(self,course_id):
+        return self.studentCourses.get_no_students_for_course(course_id)

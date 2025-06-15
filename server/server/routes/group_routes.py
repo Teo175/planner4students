@@ -14,28 +14,17 @@ from server.services.subgroup_service import SubgroupService
 
 groups_bp = Blueprint('groups', __name__)
 logger = setup_logger(__name__)
-def register_routes_group(app, session):
-    """
-    Function that registers all the routes for the group requests.
-    Includes proper error handling and logging throughout the process.
 
-    Args:
-        app: Flask application instance
-        session: Database session
-    """
-    logger.info("Registering group routes")
-    study_year_service = StudyYearService(session)
-    subgroup_service = SubgroupService(session)
-    group_service = GroupService(session)
+def register_routes_group(app, Session):
+    logger.info("Inregistrare rute pentru grupe")
 
     @groups_bp.route('/groups', methods=['GET'])
     def get_all_groups():
-        """Endpoint to get all groups"""
+        session = Session()
         try:
-            # Get all groups from the service
+            group_service = GroupService(session)
             groups = group_service.get_all_groups()
 
-            # Serialize the groups
             serialized_groups = [
                 {
                     "group_id": group.group_id,
@@ -45,9 +34,8 @@ def register_routes_group(app, session):
                 for group in groups
             ]
 
-            logger.info(f"Retrieved {len(serialized_groups)} groups")
+            logger.info(f"S-au preluat {len(serialized_groups)} grupe")
 
-            # Return the response
             return handle_response(
                 message=DATA_MESSAGE,
                 data=serialized_groups,
@@ -55,11 +43,13 @@ def register_routes_group(app, session):
             )
 
         except Exception as e:
-            logger.error(f"Error retrieving groups: {str(e)}")
+            logger.error(f"Eroare la preluarea grupelor: {str(e)}")
             return handle_response(
-                message=f"Failed to retrieve groups: {str(e)}",
+                message=f"Nu s-au putut prelua grupele: {str(e)}",
                 status_code=HTTP_ERROR_CODE
             )
+        finally:
+            session.close()
 
     app.register_blueprint(groups_bp)
-    logger.info("group routes registered successfully")
+    logger.info("Rutele pentru grupe au fost inregistrate cu succes")

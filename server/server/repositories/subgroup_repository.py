@@ -12,14 +12,7 @@ from server.models.subgroup import Subgroup
 
 
 class SubgroupRepository:
-    """
-    Repository for Professors
-    """
-
     def __init__(self, sess):
-        """Constructor for ProfessorRepository
-            :param sess: session instance
-         """
         self.session = sess
 
     def get_subgroup(self, subgroup_number:int,group:Group) -> Subgroup | None:

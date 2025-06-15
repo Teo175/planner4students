@@ -1,5 +1,5 @@
-import { LOGIN_ENDPOINT, SIGNUP_ENDPOINT, GET_STUDENT_PROFILE_ENDPOINT, UPDATE_STUDENT_PROFILE_ENDPOINT, GET_SPECIALIZATIONS_ENDPOINT, GET_STUDY_YEARS_ENDPOINT, GET_GROUPS_ENDPOINT, GET_SUBGROUPS_ENDPOINT, GET_USER_SUBGROUP_GROUP_ENDPOINT, GET_COURSES_BY_STUDENT_ENDPOINT, GET_AVAILABLE_COURSES_ENDPOINT, GET_WANTED_COURSES_ENDPOINT, UPDATE_COURSE_SUBSCRIPTIONS_ENDPOINT, RESET_COURSE_SUBSCRIPTIONS_ENDPOINT, GET_ACADEMIC_SCHEDULE_ENDPOINT, GET_ROOMS_ENDPOINT } from "../endpoints";
-import { AcademicSchedule, CompleteStudentData, Course, Group, ResponseCache, Room, Student, StudyOptions, StudyYear, Subgroup } from "../../common";
+import { LOGIN_ENDPOINT, SIGNUP_ENDPOINT, GET_STUDENT_PROFILE_ENDPOINT, UPDATE_STUDENT_PROFILE_ENDPOINT, GET_SPECIALIZATIONS_ENDPOINT, GET_STUDY_YEARS_ENDPOINT, GET_GROUPS_ENDPOINT, GET_SUBGROUPS_ENDPOINT, GET_USER_SUBGROUP_GROUP_ENDPOINT, GET_COURSES_BY_STUDENT_ENDPOINT, GET_AVAILABLE_COURSES_ENDPOINT, GET_WANTED_COURSES_ENDPOINT, UPDATE_COURSE_SUBSCRIPTIONS_ENDPOINT, RESET_COURSE_SUBSCRIPTIONS_ENDPOINT, GET_ACADEMIC_SCHEDULE_ENDPOINT, GET_ROOMS_ENDPOINT, PROFESSORS_ENDPOINT, CHATBOT_ENDPOINT } from "../endpoints";
+import { AcademicSchedule,Professor, CompleteStudentData, Course, Group, ResponseCache, Room, Student, StudyOptions, StudyYear, Subgroup } from "../../common";
 
 
 /**
@@ -20,7 +20,46 @@ class ApiService {
   // ============================================================================
   // CORE API METHODS
   // ============================================================================
+  
+updateUserProfile(profileData: {
+  first_name?: string;
+  last_name?: string;
+  subgroup_id?: string; // FIXED: Only string type
+  email?: string;
+  student_id?: string;
+}) {
+  const userData = this.getUserData();
+  if (!userData) {
+    console.warn('No user data found in localStorage to update');
+    return;
+  }
 
+  try {
+    // Update only the provided fields
+    if (profileData.first_name !== undefined) {
+      userData.first_name = profileData.first_name;
+    }
+    if (profileData.last_name !== undefined) {
+      userData.last_name = profileData.last_name;
+    }
+    if (profileData.subgroup_id !== undefined) {
+      userData.subgroup_id = profileData.subgroup_id; // FIXED: No conversion, keep as string
+    }
+    if (profileData.email !== undefined) {
+      userData.email = profileData.email;
+    }
+    if (profileData.student_id !== undefined) {
+      userData.student_id = profileData.student_id;
+    }
+    
+    // Store back to localStorage
+    localStorage.setItem('userData', JSON.stringify(userData));
+    
+    console.log('Successfully updated user profile in localStorage:', profileData);
+  } catch (error) {
+    console.error('Error updating user profile in localStorage:', error);
+  }
+}
   /**
    * Make an API call to the backend
    * @param endpoint - The API endpoint
@@ -326,7 +365,30 @@ class ApiService {
       return { subgroup: null, group: null };
     }
   }
+ // ============================================================================
+  // PROFESSORS METHODS
+  // ============================================================================
 
+  /**
+   * Get all professors for a specific department
+   * @param department - The department name 
+   * @returns Array of professors objects 
+   */
+  async getProfessorsFromDepartment(department: string): Promise<Professor[]> {
+  try {
+    const response = await this.callApi(PROFESSORS_ENDPOINT(department));
+
+    if (response && response.status === 200 && Array.isArray(response.data)) {
+      return response.data as Professor[];
+    } else {
+      console.error('Eroare la incărcarea profesorilor:', response.message || 'Raspuns invalid');
+      return [];
+    }
+  } catch (error) {
+    console.error('Eroare la fetch pentru profesori:', error);
+    return [];
+  }
+}
   // ============================================================================
   // COURSE METHODS
   // ============================================================================
@@ -519,6 +581,28 @@ searchRooms(rooms: Room[], searchTerm: string): Room[] {
     room.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     room.location?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+}
+// ============================================================================
+// CHATBOT METHODS
+// ============================================================================
+/**
+ * Trimite un mesaj către chatbot și primește un răspuns
+ * @param message - mesajul utilizatorului
+ * @returns răspunsul generat de AI
+ */
+async chatWithBot(message: string): Promise<string> {
+  try {
+    const response = await this.callApi(CHATBOT_ENDPOINT, 'POST', { message });
+     if (response && response.data && response.data.reply) {
+      return response.data.reply;
+    } else {
+      console.error('Chatbot: răspuns invalid', response);
+      return 'Eroare: nu am putut genera un răspuns.';
+    }
+  } catch (error) {
+    console.error('Eroare la chatbot:', error);
+    return 'Eroare la comunicarea cu serverul.';
+  }
 }
 }
 

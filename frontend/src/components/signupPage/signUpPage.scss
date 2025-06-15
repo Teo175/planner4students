@@ -1,179 +1,363 @@
-/* Overall container to center the form */
-.signup-container {
+.signup-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color:  #f8fafc;
+
+  .video-container {
+    flex: 1;
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f4f7fc; /* Light background color */
-    padding: 20px;
-    box-sizing: border-box;
-  
-    .combobox{
-        border: 1px solid #ccc;
-        border-radius:6px;
-        padding:2px;
-        height: 44px;
+    justify-content: center;
+    background-color: #fff;
+    position: relative;
+    overflow: hidden; 
+    video {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+      opacity: 0.95;
     }
-    .combobox2{
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 5px;
-      height: 44px;
-      vertical-align: middle;
-      align-items: center;
-      margin-top: 5px;
-    }
-    .signup-form {
-      background-color: #fff;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
-      text-align: left;
 
-      .selection-container {
-        display: flex; /* Use flexbox to align the ComboBoxes horizontally */
-        justify-content: space-between; /* Distribute space evenly between comboboxes */
-        gap: 10px; /* Add some space between the ComboBoxes */
-        margin-top: 20px; /* Add some margin to separate from the previous rows */
-
-       
-      }
-    }
-  
-    .signup-form p:first-of-type {
-      font-size: 2rem;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 30px;
-      text-align: center;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 250px; 
+      background: linear-gradient(
+        to right, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.1) 20%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0.7) 75%,
+        rgba(255, 255, 255, 0.95) 100%
+      );
+      pointer-events: none;
+      z-index: 1;
     }
     
-    .signup-form p:last-of-type {
-        text-align: center;
-        margin-top:30px;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100px;
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(248, 250, 252, 0.8) 100%
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+  }
+
+  .signup-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   
+    padding: 20px; 
+    
+    background-color: rgba(248, 250, 252, 0.98); 
+    backdrop-filter: blur(1px);
+
+
+    .form-header {
+      text-align: center;
+
+      .form-logo {
+        height: 100px; 
+        object-fit: contain;
+        margin-bottom: 15px;
+      }
     }
 
-    .signup-form p {
-      font-size: 1rem;
-      color: #555;
-      margin-top: 10px;
-      align-items: center;
-    }
-  
-    /* Flexbox layout for each row of fields */
-    .form-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px; 
-    }
-  
-    /* Field container settings */
-    .field-container {
-      flex: 1 1 45%; /* Take 45% width per field on the row */
-      min-width: 220px; /* Ensure that fields don't shrink too much */
-      margin-bottom: 15px;
-    }
-  
-    /* Input fields style */
-    .signup-form .field-container input {
+    .signup-form {
+      border-radius: 8px;
+      text-align: left;
       width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      margin-top: 5px;
-      outline: none;
-      transition: border-color 0.3s ease;
-    }
-    .signup-form input::placeholder {
-        color: #888; /* Light gray color for placeholder */
-      }
-  
-    /* Focus effect for input fields */
-    .signup-form .field-container input:focus {
-      border-color: #0078d4;
-    }
-  
-    /* ComboBox styling */
-    .signup-form .field-container .ms-ComboBox {
-      width: 100%;
-      margin-top: 5px;
-      font-size: 1rem;
-    }
-  
-    /* Button styling */
-    .signup-form button {
-      background-color: #0078d4;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      width: 100%;
-      margin-top: 20px;
-    }
+       backdrop-filter: blur(10px); 
+      border: 1px solid rgba(255, 255, 255, 0.2); 
       
-    .signup-form button:hover {
-      background-color: #005a8e;
-    }
-  
-    /* Styling for the links */
-    .signup-form a {
-      color: #0078d4;
-      font-weight: 600;
-      text-decoration: none;
-    }
-  
-    .signup-form a:hover {
-      text-decoration: underline;
-    }
-  
-    /* Styling for selection-container to display comboboxes in a row */
 
+      p {
+        font-size: 0.9rem;
+        color: #555;
+        margin-top: 8px;
+        text-align: center;
+      }
 
-    /* Small responsiveness for mobile screens */
-    @media (max-width: 600px) {
-      .signup-form {
-        padding: 20px;
-        width: 100%;
+      .error-message {
+        color: #d32f2f;
+        background-color: #ffebee;
+        padding: 8px; 
+        border-radius: 4px;
+        margin-bottom: 8px; 
       }
-  
-      .signup-form p {
-        font-size: 1.4rem;
-      }
-  
-      .signup-form button {
-        font-size: 1rem;
-        padding: 10px;
-      }
-  
-      /* Adjust form-row layout for smaller screens */
+
       .form-row {
-        flex-direction: column;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px; 
       }
-  
+      .form-row-account{
+        display: flex;
+        gap: 12px; 
+      }
+
       .field-container {
-        flex: 1 1 100%; /* Stack the fields vertically on smaller screens */
+        flex: 1 1 45%;
+        min-width: 200px;
+        label {
+          font-weight: 500;
+          padding-left: 5px;
+          display: block;
+          color: #333;
+          margin-bottom: 3px; 
+        }
+        input {
+         
+          width: 100%;
+          padding: 10px; 
+          margin: 6px 0; 
+          border: 2px solid #e0e0e0;
+          border-radius: 6px;
+          font-size: 1rem;
+          
+          color: #333;
+          transition: border-color 0.5s ease, background-color 0.5s ease;
+          backdrop-filter: blur(5px);
+
+          margin-top: 4px;
+          outline: none;
+          transition: border-color 0.3s ease;
+          box-sizing: border-box;
+
+          &::placeholder {
+            color: #888;
+          }
+
+          &:focus {
+            border-color: #0078d4;
+          }
+        }
+      }
+      .input-error {
+        border-color: #dc3545 !important;
+      }
+
+      .field-error {
+        color: #dc3545;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        display: block;
+        margin-top: 3px; 
+        padding-left: 5px;
+      }
+
+      .dropdown-section {
+        margin: 15px 0; 
+
+        .section-title {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #333;
+          padding-bottom: 4px; 
+          border-bottom: 2px solid #0078d4;
+        }
+
+        .dropdown-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px; 
+          margin-bottom: 12px;
+
+          .combobox {
+            flex: 1 1 300px;
+            min-width: 250px;
+            height: 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 0 10px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+
+            &:focus {
+              border-color: #0078d4;
+              outline: none;
+            }
+
+            &:disabled {
+              background-color: #f5f5f5;
+              border-color: #ddd;
+              cursor: not-allowed;
+            }
+          }
+        }
+
+        
+        &.academic-section {
+          .dropdown-row {
+            .combobox {
+              flex: 1 1 45%;
+              min-width: 200px;
+            }
+          }
+        }
+      }
+
+      .selection-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px; 
+        margin: 15px 0;
+
+        .combobox {
+          width: 100%;
+          height: 40px; 
+          border: 2px solid #e0e0e0;
+          border-radius: 6px;
+          padding: 0 10px;
+          box-sizing: border-box;
+        }
+      }
+
+      .combobox2 {
+        flex: 1 1 48%;
+        min-width: 200px;
+        height: 40px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 0 10px; 
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+          border-color: #0078d4;
+          outline: none;
+        }
+
+        &:disabled {
+          background-color: #f5f5f5;
+          border-color: #ddd;
+          cursor: not-allowed;
+        }
+      }
+
+      button {
+        background-color: #0078d4;
+        color: white;
+        padding: 10px 18px; 
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        margin-top: 25px; 
+
+        &:hover:not(:disabled) {
+          background-color: #005a8e;
+        }
+
+        &:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+      }
+
+      a {
+        color: #0078d4;
+        font-weight: 600;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    
+  }
+
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .video-container {
+      height: 200px;
+      width: 100%;
+
+      &::after {
+        top: auto;
+        bottom: 0;
+        height: 40px;
+        width: 100%;
+        background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.8), #ffffff);
+      }
+    }
+
+    .signup-container {
+      padding: 15px;
+
+      .form-header .form-logo {
+        height: 40px;
+      }
+
+      .signup-form {
+        padding: 15px;
+
+        .form-row {
+          flex-direction: column;
+          gap: 8px; 
+        }
+
+        .field-container {
+          flex: 1 1 100%;
+          min-width: unset;
+        }
+
+        .dropdown-section {
+          .dropdown-row {
+            flex-direction: column;
+            gap: 8px;
+
+            .combobox {
+              flex: 1 1 100%;
+              min-width: unset;
+            }
+          }
+
+          &.academic-section {
+            .dropdown-row {
+              .combobox {
+                flex: 1 1 100%;
+                min-width: unset;
+              }
+            }
+          }
+        }
+
+        .selection-container {
+          .combobox {
+            min-width: unset;
+          }
+        }
+
+        .combobox2 {
+          width: 100%;
+          min-width: unset;
+        }
       }
     }
   }
-  
-.fui-Listbox {
-    background-color: white !important; 
-    border-radius: 6px !important;
-    border: 1px solid #ccc;       
-
-}
-.fui-Option {
-    background-color: white !important;  
-    color: black !important;    
-    padding: 10px !important;   
-        
-}
-
-.fui-Option:hover {
-    background-color: #0078d4 !important;  
-    color: white !important;
 }

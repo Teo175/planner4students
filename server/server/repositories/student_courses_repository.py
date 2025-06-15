@@ -14,14 +14,8 @@ from server.models.student_courses import StudentCourses
 from server.models.study_year import StudyYear
 
 class StudentCoursesRepository:
-    """
-    Repository for Professors
-    """
 
     def __init__(self, sess):
-        """Constructor for ProfessorRepository
-            :param sess: session instance
-         """
         self.session = sess
 
     def get_student(self, group_number:int,study_year:StudyYear) -> Group | None:
@@ -36,31 +30,16 @@ class StudentCoursesRepository:
         ).first()
 
     def update_student_courses(self, student_id: UUID, new_courses) -> bool:
-        """
-        Actualizează lista de cursuri pentru un anumit student.
-        Șterge toate înregistrările existente și adaugă noile cursuri.
-
-        Args:
-            student_id: UUID-ul studentului
-            new_courses: Lista de cursuri trimise de la frontend
-
-        Returns:
-            bool: True dacă actualizarea a reușit, False în caz contrar
-        """
         try:
-            # Șterge toate înregistrările existente pentru acest student
             self.session.query(StudentCourses).filter(
                 StudentCourses.student_id == student_id
             ).delete()
 
-            # Adaugă noile înregistrări
+
             for course in new_courses:
-                # Determină course_id în funcție de tipul obiectului
                 if hasattr(course, 'course_id'):
-                    # Este un obiect Course
                     course_id = course.course_id
                 elif isinstance(course, dict) and 'course_id' in course:
-                    # Este un dicționar
                     course_id = course['course_id']
                 else:
                     print(f"Formatul cursului nu este recunoscut: {course}")
@@ -72,12 +51,10 @@ class StudentCoursesRepository:
                 )
                 self.session.add(student_course)
 
-            # Commit schimbările
             self.session.commit()
             return True
 
         except Exception as e:
-            # În caz de eroare, anulează tranzacția
             self.session.rollback()
             print(f"Eroare la actualizarea cursurilor studentului: {str(e)}")
             return False
@@ -94,6 +71,11 @@ class StudentCoursesRepository:
             .filter(StudentCourses.student_id == student_id) \
             .options(
             joinedload(Course.room),
-            joinedload(Course.professor)  # Adăugăm încărcarea eager pentru profesor
+            joinedload(Course.professor)
         ) \
             .all()
+    def get_no_students_for_course(self, course_id):
+        count = self.session.query(func.count(StudentCourses.student_id)) \
+            .filter(StudentCourses.course_id == course_id) \
+            .scalar()
+        return count or 0

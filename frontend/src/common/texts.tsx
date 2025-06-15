@@ -16,11 +16,11 @@ export const LOGIN_PASSWORD_LABEL = "Parola";
 
 // ============ LOGIN FORM PLACEHOLDERS ============
 export const LOGIN_EMAIL_PLACEHOLDER = "IonPopescu@stud.ubbcluj.ro";
-export const LOGIN_PASSWORD_PLACEHOLDER = "parola";
+export const LOGIN_PASSWORD_PLACEHOLDER = "Parola";
 
 // ============ LOGIN BUTTON STATES ============
-export const LOGIN_BUTTON_DEFAULT = "Loghează-te";
-export const LOGIN_BUTTON_LOADING = "Logare...";
+export const LOGIN_BUTTON_DEFAULT = "Conectare";
+export const LOGIN_BUTTON_LOADING = "Conectare...";
 
 // ============ SIGNUP PAGE MESSAGES ============
 export const SIGNUP_TITLE = "Înregistrează-te pe Planner4Students!";
@@ -41,7 +41,7 @@ export const SIGNUP_PASSWORD_LABEL = "Parola";
 export const SIGNUP_FIRST_NAME_PLACEHOLDER = "Ion";
 export const SIGNUP_LAST_NAME_PLACEHOLDER = "Popescu";
 export const SIGNUP_EMAIL_PLACEHOLDER = "johndoe@stud.ubbcluj.ro";
-export const SIGNUP_PASSWORD_PLACEHOLDER = "parola";
+export const SIGNUP_PASSWORD_PLACEHOLDER = "Parola";
 
 // ============ SIGNUP DROPDOWN LOADING STATES ============
 export const SIGNUP_LOADING_SPECIALIZATIONS = "Încărcare specializări...";

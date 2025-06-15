@@ -9,14 +9,7 @@ from server.models.student import Student
 from server.models.study_year import StudyYear
 
 class StudyYearRepository:
-    """
-    Repository for Professors
-    """
-
     def __init__(self, sess):
-        """Constructor for ProfessorRepository
-            :param sess: session instance
-         """
         self.session = sess
 
     def get_study_year(self, year: int, specialization: Specialization) -> StudyYear | None:
@@ -46,10 +39,4 @@ class StudyYearRepository:
         return study_year
 
     def get_all(self) -> list[StudyYear]:
-        """
-               Get all study_years from the database
-
-               Returns:
-                   list[StudyYear]: List of all study year objects
-               """
         return self.session.query(StudyYear).all()

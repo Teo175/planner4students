@@ -61,9 +61,8 @@
     flex-grow: 1;
     overflow: hidden;
     
-    // Ajustări specifice pentru DayView în dialog
     :global(.day-view) {
-      height: calc(90vh - 70px); // Ajustează înălțimea pentru dialog
+      height: calc(90vh - 70px); 
       
       :global(.day-header) {
         position: sticky;
@@ -74,7 +73,6 @@
     }
   }
   
-  // Animații
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }

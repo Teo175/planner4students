@@ -48,7 +48,12 @@ class ProfessorTableColumns(Enum):
     TITLE = "title"
     EMAIL = "email"
     WEB_PAGE = "web_page"
+    DEPARTMENT = "department"
+    IMAGE_URL = "image_url"
+    DETAILS = "details"
 
+class DomainTableColumns(Enum):
+    NAME = "name"
 class RoomTableColumns(Enum):
     ROOM_ID = "room_id"
     NAME = "name"
@@ -73,3 +78,8 @@ class StudentCoursesTableColumns(Enum):
     ID ="id"
     STUDENT_ID = "student_id"
     COURSE_ID = "course_id"
+
+class ProfessorDomainsTableColumns(Enum):
+    ID ="id"
+    PROFESSOR_ID = "professor_id"
+    DOMAIN_ID = "domain_id"

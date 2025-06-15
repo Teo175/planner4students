@@ -1,4 +1,4 @@
-// Variables to match EditProfile styling
+
 $primary-color: #1a73e8;
 $secondary-color: #0F9D58;
 $error-color: #d93025;
@@ -15,7 +15,6 @@ $shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
 $shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
 $transition-default: all 0.2s ease;
 
-// Mixins
 @mixin flex-center {
   display: flex;
   align-items: center;
@@ -43,14 +42,11 @@ $transition-default: all 0.2s ease;
   }
 }
 
-// Main container - matching EditProfile layout
 .room-maps-container {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: flex-start;
-  min-height: 100vh;
-  background-color: $background-color;
   padding: 2rem;
 
   .room-maps-content {
@@ -71,44 +67,35 @@ $transition-default: all 0.2s ease;
   }
 }
 
-// Header section - matching EditProfile header
 .room-maps-header {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid $border-color;
-
+  width: 100%;
   .header-controls {
     margin-bottom: 1rem;
 
     .back-button {
-      @include flex-center;
+      display: flex;
+      align-items: center;
       gap: 8px;
-      background: none;
-      border: none;
+      padding: 12px 20px;
+      background: $card-background;
+      border: 2px solid $primary-color;
       color: $primary-color;
-      font-size: 0.95rem;
-      font-weight: 600;
-      padding: 0.5rem;
-      margin-left: -0.5rem;
+      border-radius: $border-radius;
       cursor: pointer;
-      border-radius: 4px;
-      width: fit-content;
-      transition: $transition-default;
-
-      span {
-        margin-left: 0.5rem;
-      }
-
+      font-weight: 600;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+      
       &:hover {
-        background-color: rgba(26, 115, 232, 0.08);
-      }
-
-      &:active {
-        transform: translateY(0);
+        background: $primary-color;
+        color: white;
       }
 
       @media (max-width: 768px) {
-        padding: 0.5rem;
+        padding: 10px 16px;
         font-size: 0.9rem;
         
         span {
@@ -120,6 +107,10 @@ $transition-default: all 0.2s ease;
 
   .header-content {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .room-maps-title {
@@ -154,7 +145,6 @@ $transition-default: all 0.2s ease;
   }
 }
 
-// Search section
 .search-section {
   margin-bottom: 2rem;
   width: 100%;
@@ -230,56 +220,47 @@ $transition-default: all 0.2s ease;
   }
 }
 
-// Rooms grid with vertical scroll
 .rooms-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   width: 100%;
   margin-bottom: 2rem;
-  max-height: calc(100vh - 290px); // Limitează înălțimea pentru a forța scroll
-  overflow-y: auto; // Scroll vertical
-  overflow-x: hidden; // Previne scroll orizontal
-  padding-right: 8px; // Spațiu pentru scrollbar
+  max-height: calc(100vh - 290px); 
+  overflow-y: auto; 
+  overflow-x: hidden;
+  padding-right: 8px; 
 
-  // Custom scrollbar
   &::-webkit-scrollbar {
     width: 8px;
   }
 
   &::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
     border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: $primary-color;
     border-radius: 4px;
     
-    &:hover {
-      background: #0d5bba;
-    }
+   
   }
 
-  // Firefox scrollbar
   scrollbar-width: thin;
-  scrollbar-color: $primary-color rgba(0, 0, 0, 0.05);
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 1rem;
-    max-height: calc(100vh - 300px); // Înălțime ajustată pentru mobile
+    max-height: calc(100vh - 300px); 
     padding-right: 4px;
   }
 }
 
-// Room card - matching form section styling
 .room-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background-color: $card-background;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 1.5rem;
   border: 1px solid $border-color;
   transition: $transition-default;
@@ -309,11 +290,11 @@ $transition-default: all 0.2s ease;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-right: 12px; // Spațiu între text și buton
+      margin-right: 12px; 
     }
 
     .room-actions {
-      flex-shrink: 0; // Previne comprimarea butonului
+      flex-shrink: 0; 
 
       .navigate-button {
         @include button-reset;
@@ -373,7 +354,7 @@ $transition-default: all 0.2s ease;
         color: $text-secondary;
         border-radius: 4px;
         font-weight: 500;
-        max-width: 200px; // Limitează lățimea pentru elipsis
+        max-width: 200px; 
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -386,7 +367,7 @@ $transition-default: all 0.2s ease;
       line-height: 1.4;
       margin: 0.5rem 0 0 0;
       display: -webkit-box;
-      -webkit-line-clamp: 2; // Limitează la 2 linii
+      -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -425,7 +406,6 @@ $transition-default: all 0.2s ease;
   }
 }
 
-// No results state
 .no-results {
   @include flex-center;
   flex-direction: column;
@@ -454,7 +434,6 @@ $transition-default: all 0.2s ease;
   }
 }
 
-// Footer section - matching EditProfile message styling
 .room-maps-footer {
   margin-top: 2rem;
   padding-top: 1.5rem;
@@ -491,10 +470,8 @@ $transition-default: all 0.2s ease;
   }
 }
 
-// Loading animation
 @include loading-animation;
 
-// Responsive adjustments
 @media (max-width: 480px) {
   .room-card {
     padding: 1rem;
@@ -512,17 +489,16 @@ $transition-default: all 0.2s ease;
       .room-floor,
       .room-building,
       .room-location {
-        max-width: 100%; // Pe mobile, permite full width
+        max-width: 100%;
       }
     }
   }
 
   .search-section .search-input-container .search-input {
-    font-size: 16px; // Prevents zoom on iOS
+    font-size: 16px;
   }
 }
 
-// Accessibility improvements
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -531,7 +507,6 @@ $transition-default: all 0.2s ease;
   }
 }
 
-// Dark mode support (matching EditProfile approach)
 @media (prefers-color-scheme: dark) {
   .room-maps-container {
     background-color: #1a1a1a;
@@ -559,10 +534,13 @@ $transition-default: all 0.2s ease;
   }
 
   .room-maps-header .header-controls .back-button {
+    background: #2d2d2d;
+    border-color: $primary-color;
     color: $primary-color;
 
     &:hover {
-      background-color: rgba(26, 115, 232, 0.1);
+      background: $primary-color;
+      color: white;
     }
   }
 
@@ -572,7 +550,6 @@ $transition-default: all 0.2s ease;
     color: #e8eaed !important;
   }
 
-  // Dark mode scrollbar pentru rooms grid
   .rooms-grid {
     &::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0.05);

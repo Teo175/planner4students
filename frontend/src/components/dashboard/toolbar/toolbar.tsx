@@ -1,29 +1,71 @@
-
-// src/components/Calendar/CalendarToolbar.jsx
-import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const CalendarToolbar = ({ 
-  currentDate, 
-  viewType, 
-  setViewType, 
-  goToPrevious, 
-  goToNext, 
-  goToToday 
-}) => {
-  const monthNames = [
+type ViewType = 'month' | 'week' | 'day';
+
+interface CalendarToolbarProps {
+  currentDate: Date;
+  viewType: ViewType;
+  setViewType: (viewType: ViewType) => void;
+  goToPrevious: () => void;
+  goToNext: () => void;
+  goToToday: () => void;
+}
+
+interface ViewButtonConfig {
+  type: ViewType;
+  label: string;
+}
+
+const CalendarToolbar = ({
+  currentDate,
+  viewType,
+  setViewType,
+  goToPrevious,
+  goToNext,
+  goToToday
+}: CalendarToolbarProps) => {
+  const monthNames: string[] = [
     'Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie',
     'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'
   ];
 
-  const getDisplayTitle = () => {
-    if (viewType === 'month') {
-      return `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
-    } else if (viewType === 'week') {
-      return `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()} `;
-    } else if (viewType === 'day') {
-      return `${currentDate.getDate()} ${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+  const viewButtons: ViewButtonConfig[] = [
+    { type: 'month', label: 'Lună' },
+    { type: 'week', label: 'Săptămână' },
+    { type: 'day', label: 'Zi' }
+  ];
+
+  const getDisplayTitle = (): string => {
+    const month: string = monthNames[currentDate.getMonth()];
+    const year: number = currentDate.getFullYear();
+    const day: number = currentDate.getDate();
+
+    switch (viewType) {
+      case 'month':
+        return `${month} ${year}`;
+      case 'week':
+        return `${month} ${year}`;
+      case 'day':
+        return `${day} ${month} ${year}`;
+      default:
+        return `${month} ${year}`;
     }
+  };
+
+  const handleViewTypeChange = (newViewType: ViewType): void => {
+    setViewType(newViewType);
+  };
+
+  const handleTodayClick = (): void => {
+    goToToday();
+  };
+
+  const handlePreviousClick = (): void => {
+    goToPrevious();
+  };
+
+  const handleNextClick = (): void => {
+    goToNext();
   };
 
   return (
@@ -31,21 +73,26 @@ const CalendarToolbar = ({
       <div className="toolbar-left">
         <button 
           className="today-button"
-          onClick={goToToday}
+          onClick={handleTodayClick}
+          type="button"
         >
           Astăzi
         </button>
         
         <button 
           className="navigation-button"
-          onClick={goToPrevious}
+          onClick={handlePreviousClick}
+          type="button"
+          aria-label="Săptămâna anterioară"
         >
           <ChevronLeft size={20} />
         </button>
         
         <button 
           className="navigation-button"
-          onClick={goToNext}
+          onClick={handleNextClick}
+          type="button"
+          aria-label="Săptămâna următoare"
         >
           <ChevronRight size={20} />
         </button>
@@ -57,24 +104,17 @@ const CalendarToolbar = ({
       
       <div className="toolbar-right">
         <div className="view-switcher">
-          <button 
-            className={`view-button ${viewType === 'month' ? 'active' : ''}`}
-            onClick={() => setViewType('month')}
-          >
-            Lună
-          </button>
-          <button 
-            className={`view-button ${viewType === 'week' ? 'active' : ''}`}
-            onClick={() => setViewType('week')}
-          >
-            Săptămână
-          </button>
-          <button 
-            className={`view-button ${viewType === 'day' ? 'active' : ''}`}
-            onClick={() => setViewType('day')}
-          >
-            Zi
-          </button>
+          {viewButtons.map((button: ViewButtonConfig) => (
+            <button
+              key={button.type}
+              className={`view-button ${viewType === button.type ? 'active' : ''}`}
+              onClick={() => handleViewTypeChange(button.type)}
+              type="button"
+              aria-pressed={viewType === button.type}
+            >
+              {button.label}
+            </button>
+          ))}
         </div>
       </div>
     </div>
@@ -82,3 +122,4 @@ const CalendarToolbar = ({
 };
 
 export default CalendarToolbar;
+export type { CalendarToolbarProps, ViewType };

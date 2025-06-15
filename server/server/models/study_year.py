@@ -15,12 +15,12 @@ class StudyYear(Base):
     year = Column(StudyYearTableColumns.YEAR.value,Integer,nullable= False)
     specialization_id = Column(
         StudyYearTableColumns.SPECIALIZATION_ID.value,
-        UUID(as_uuid=True),  # Change the type to match Specialization's primary key
-        ForeignKey('specializations.specialization_id'),  # Add foreign key constraint
+        UUID(as_uuid=True),
+        ForeignKey('specializations.specialization_id'),
         nullable=False
     )
-    specialization = relationship("Specialization", back_populates="study_years") # intoarce complet tot obiectul din tabela specialization
-    groups = relationship("Group",back_populates="study_year") #intoarce toate grupurile din study year respectiv
+    specialization = relationship("Specialization", back_populates="study_years")
+    groups = relationship("Group",back_populates="study_year")
     courses = relationship("Course", back_populates="study_year")
     def __init__(self, year: int, specialization_id: UUID):
         super().__init__()

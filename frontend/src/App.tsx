@@ -5,6 +5,7 @@ import Schedule from "./components/dashboard/schedule/schedule";
 import EditProfile from "./components/editProfile/editProfile";
 import Signup from "./components/signupPage/signUpPage";
 import RoomMaps from "./components/roomMaps/roomMaps";
+import Professors from "./components/professors/professors";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="professors" element={<ProtectedRoute><Professors/></ProtectedRoute>}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,23 +1,9 @@
-from typing import Iterable
-
-from sqlalchemy import func, and_
 
 from server.models.group import Group
-from server.models.professor import Professor
-from server.models.specialization import Specialization
-from server.models.student import Student
-
 from server.models.study_year import StudyYear
 
 class GroupRepository:
-    """
-    Repository for Professors
-    """
-
     def __init__(self, sess):
-        """Constructor for ProfessorRepository
-            :param sess: session instance
-         """
         self.session = sess
 
     def get_group(self, group_number:int,study_year:StudyYear) -> Group | None:

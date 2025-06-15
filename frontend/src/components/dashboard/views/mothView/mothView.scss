@@ -7,7 +7,7 @@ $event-text-color: #fff;
 $view-more-color: #5f6368;
 $view-more-hover: #1a73e8;
 $holiday-color: #d93025;
-$holiday-bg-color: rgba(217, 48, 37, 0.08); // Fundal ușor roșiatic pentru zilele libere
+$holiday-bg-color: rgba(217, 48, 37, 0.08); 
 
 .month-view-container {
   display: flex;
@@ -17,17 +17,15 @@ $holiday-bg-color: rgba(217, 48, 37, 0.08); // Fundal ușor roșiatic pentru zil
   background-color: #ffffff;
   overflow-x: hidden;
   overflow-y: auto;
-  /* Sticky headers container */
   .day-headers-container {
     display: grid;
-    /* Folosește distribuție uniformă pentru coloane, doar S și D puțin mai mici */
     grid-template-columns: repeat(5, 1fr) 0.7fr 0.7fr;
     position: sticky;
     top: 0;
-    z-index: 10; /* Ensure headers stay above content */
-    background-color: #ffffff; /* Match container background */
-    border-bottom: 2px solid $border-color; /* More visible separation */
-    width: 100%; /* Asigură că folosește toată lățimea */
+    z-index: 10;
+    background-color: #ffffff;
+    border-bottom: 2px solid $border-color; 
+    width: 100%; 
     position: sticky;
     .day-header {
       text-align: center;
@@ -46,26 +44,23 @@ $holiday-bg-color: rgba(217, 48, 37, 0.08); // Fundal ușor roșiatic pentru zil
     }
   }
   
-  /* Scrollable days grid */
   .month-grid {
     display: grid;
-    /* Menține același grid ca header-ul */
     grid-template-columns: repeat(5, 1fr) 0.7fr 0.7fr;
     border-right: 1px solid $border-color;
     border-bottom: 1px solid $border-color;
-    
     flex: 1;
-    width: 100%; /* Asigură că folosește toată lățimea */
+    width: 100%; 
      
     .day-cell {
       border-top: 1px solid $border-color;
       border-left: 1px solid $border-color;
       padding: 0.25rem;
       position: relative;
-      overflow: hidden; /* Ensure content doesn't overflow */
+      overflow: hidden; 
       display: flex;
       flex-direction: column;
-      min-height: 100px; // Asigură înălțimea minimă a celulei
+      min-height: 100px; 
        
       &.other-month {
         background-color: rgba(0, 0, 0, 0.02);
@@ -85,14 +80,12 @@ $holiday-bg-color: rgba(217, 48, 37, 0.08); // Fundal ușor roșiatic pentru zil
         }
       }
       
-      // Stilizare pentru zilele de sărbătoare
       &.holiday {
         background-color: $holiday-bg-color;
         
-        // Stilizare pentru numărul zilei când este sărbătoare - doar culoare și bold
         .day-number:not(.today) {
           color: $holiday-color;
-          font-weight: 700; // Bold
+          font-weight: 700; 
         }
       }
        
@@ -120,7 +113,7 @@ $holiday-bg-color: rgba(217, 48, 37, 0.08); // Fundal ușor roșiatic pentru zil
         justify-content: center;
         color: $holiday-color;
         font-size: 0.75rem;
-        font-weight: 700; // Bold
+        font-weight: 700;
         margin-top: 2px;
         padding: 2px 0;
         white-space: nowrap;
@@ -134,7 +127,7 @@ $holiday-bg-color: rgba(217, 48, 37, 0.08); // Fundal ușor roșiatic pentru zil
         display: flex;
         flex-direction: column;
         gap: 2px;
-        width: 100%; /* Folosește toată lățimea celulei */
+        width: 100%;
         flex: 1;
         
         .view-more-button {
@@ -147,7 +140,7 @@ $holiday-bg-color: rgba(217, 48, 37, 0.08); // Fundal ușor roșiatic pentru zil
           color: $view-more-color;
           text-align: center;
           transition: all 0.2s ease;
-          margin-top: auto; // Împinge butonul către partea de jos
+          margin-top: auto; 
           
           &:hover {
             background-color: rgba($primary-color, 0.1);
@@ -173,10 +166,9 @@ $holiday-bg-color: rgba(217, 48, 37, 0.08); // Fundal ușor roșiatic pentru zil
           text-overflow: ellipsis;
           display: flex;
           flex-direction: column;
-          width: calc(100% - 1rem); /* Compensează pentru padding */
-          height: 36px; // Înălțime fixă pentru evenimente
-          min-height: 36px; // Înălțime minimă
-          flex-shrink: 0; // Previne micșorarea
+          height: 36px; 
+          min-height: 36px; 
+          flex-shrink: 0; 
            
           .event-time {
             font-weight: bold;
@@ -199,7 +191,7 @@ $holiday-bg-color: rgba(217, 48, 37, 0.08); // Fundal ușor roșiatic pentru zil
           color: $text-color;
           text-align: center;
           padding: 0.25rem;
-          width: calc(100% - 0.5rem); /* Compensează pentru padding */
+          width: calc(100% - 0.5rem); 
         }
       }
     }

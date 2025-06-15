@@ -3,10 +3,6 @@ from server.repositories.academic_schedule_repository import AcademicScheduleRep
 
 
 class AcademicScheduleService:
-    """
-    Service for GroupService
-    """
-
     def __init__(self, session):
         self.academicScheduleRepository = AcademicScheduleRepository(session)
         self.academicHolidayRepository = AcademicHolidayRepository(session)

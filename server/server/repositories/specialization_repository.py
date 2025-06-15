@@ -8,14 +8,7 @@ from server.models.student import Student
 
 
 class SpecializationRepository:
-    """
-    Repository for Professors
-    """
-
     def __init__(self, sess):
-        """Constructor for ProfessorRepository
-            :param sess: session instance
-         """
         self.session = sess
 
     def get_specialization_by_name_and_language(self, name: str, language: str) -> Specialization | None:
@@ -39,10 +32,4 @@ class SpecializationRepository:
         return specialization
 
     def get_all(self) -> list[Specialization]:
-        """
-        Get all specializations from the database
-
-        Returns:
-            list[Specialization]: List of all specialization objects
-        """
         return self.session.query(Specialization).all()

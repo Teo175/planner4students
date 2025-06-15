@@ -15,29 +15,17 @@ from server.services.subgroup_service import SubgroupService
 
 specializations_bp = Blueprint('specializations', __name__)
 logger = setup_logger(__name__)
-def register_routes_specialization(app, session):
-    """
-    Function that registers all the routes for the specialization requests.
-    Includes proper error handling and logging throughout the process.
 
-    Args:
-        app: Flask application instance
-        session: Database session
-    """
-    logger.info("Registering specialization routes")
-    specialization_service = SpecializationService(session)
-    study_year_service = StudyYearService(session)
-    subgroup_service = SubgroupService(session)
-    group_service = GroupService(session)
+def register_routes_specialization(app, Session):
+    logger.info("Inregistrare rute pentru specializari")
 
     @specializations_bp.route('/specializations', methods=['GET'])
     def get_all_specializations():
-        """Endpoint to get all specializations"""
+        session = Session()
         try:
-            # Get all specializations from the service
+            specialization_service = SpecializationService(session)
             specializations = specialization_service.get_all_specializations()
 
-            # Serialize the specializations
             serialized_specializations = [
                 {
                     "specialization_id": spec.specialization_id,
@@ -47,9 +35,8 @@ def register_routes_specialization(app, session):
                 for spec in specializations
             ]
 
-            logger.info(f"Retrieved {len(serialized_specializations)} specializations")
+            logger.info(f"S-au preluat {len(serialized_specializations)} specializari")
 
-            # Return the response
             return handle_response(
                 message=DATA_MESSAGE,
                 data=serialized_specializations,
@@ -57,11 +44,13 @@ def register_routes_specialization(app, session):
             )
 
         except Exception as e:
-            logger.error(f"Error retrieving specializations: {str(e)}")
+            logger.error(f"Eroare la preluarea specializarilor: {str(e)}")
             return handle_response(
-                message=f"Failed to retrieve specializations: {str(e)}",
+                message=f"Nu s-au putut prelua specializarile: {str(e)}",
                 status_code=HTTP_ERROR_CODE
             )
+        finally:
+            session.close()
 
     app.register_blueprint(specializations_bp)
-    logger.info("Specialization routes registered successfully")
+    logger.info("Rutele pentru specializari au fost inregistrate cu succes")

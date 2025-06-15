@@ -15,29 +15,17 @@ from server.services.subgroup_service import SubgroupService
 
 study_year_bp = Blueprint('study_years', __name__)
 logger = setup_logger(__name__)
-def register_routes_study_year(app, session):
-    """
-    Function that registers all the routes for the specialization requests.
-    Includes proper error handling and logging throughout the process.
 
-    Args:
-        app: Flask application instance
-        session: Database session
-    """
-    logger.info("Registering specialization routes")
-    specialization_service = SpecializationService(session)
-    study_year_service = StudyYearService(session)
-    subgroup_service = SubgroupService(session)
-    group_service = GroupService(session)
+def register_routes_study_year(app, Session):
+    logger.info("Inregistrare rute pentru ani de studiu")
 
     @study_year_bp.route('/study_years', methods=['GET'])
     def get_all_study_years():
-        """Endpoint to get all study years"""
+        session = Session()
         try:
-            # Get all specializations from the service
+            study_year_service = StudyYearService(session)
             study_years = study_year_service.get_all_study_years()
 
-            # Serialize the specializations
             serialized_study_years = [
                 {
                     "study_year_id": year.study_year_id,
@@ -47,9 +35,8 @@ def register_routes_study_year(app, session):
                 for year in study_years
             ]
 
-            logger.info(f"Retrieved {len(serialized_study_years)} study years")
+            logger.info(f"S-au preluat {len(serialized_study_years)} ani de studiu")
 
-            # Return the response
             return handle_response(
                 message=DATA_MESSAGE,
                 data=serialized_study_years,
@@ -57,11 +44,13 @@ def register_routes_study_year(app, session):
             )
 
         except Exception as e:
-            logger.error(f"Error retrieving study_years: {str(e)}")
+            logger.error(f"Eroare la preluarea anilor de studiu: {str(e)}")
             return handle_response(
-                message=f"Failed to retrieve study_years: {str(e)}",
+                message=f"Nu s-au putut prelua anii de studiu: {str(e)}",
                 status_code=HTTP_ERROR_CODE
             )
+        finally:
+            session.close()
 
     app.register_blueprint(study_year_bp)
-    logger.info("Study year routes registered successfully")
+    logger.info("Rutele pentru ani de studiu au fost inregistrate cu succes")

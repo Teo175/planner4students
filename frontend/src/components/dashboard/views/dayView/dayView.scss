@@ -1,202 +1,187 @@
-// Variables
 $primary-color: #1a73e8;
 $secondary-color: #f1f3f4;
 $border-color: #dadce0;
 $text-color: #3c4043;
 $today-color: #1a73e8;
 $event-text-color: #fff;
-$holiday-color: #d93025; // Roșu pentru sărbători
+$holiday-color: #d93025; 
 
 .day-view {
- .day-header {
+  .day-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    border-bottom: 1px solid $border-color;
+    position: relative;
+    min-height: 40px;
+
+    .empty-cell {
+      min-width: 60px;
+      border-right: 1px solid $border-color;
+    }
+
+    .day-name {
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+    }
+
+    .day-number {
+      font-weight: 500;
+      padding: 0.25rem;
+      width: 1.8rem;
+      height: 1.8rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      align-self: center;
-      border-bottom: 1px solid $border-color;
-      position: relative; // Pentru poziționarea numelui sărbătorii
-  
-      .empty-cell {
-        min-width: 60px;
-        border-right: 1px solid $border-color;
-      }
-  
-      .day-header {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 0.5rem;
-        background-color: $secondary-color;
-        border-right: 1px solid $border-color;
-      }
-  
-      .day-name {
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-      }
-  
-      .day-number {
-        font-weight: 500;
-        padding: 0.25rem;
-        width: 1.8rem;
-        height: 1.8rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 10px;
-  
-        &.today {
-          background-color: $today-color;
-          color: white;
-          border-radius: 50%;
-        }
-      }
-      
-      // Stilizare pentru numele sărbătorii
-      .holiday-name {
-        color: $holiday-color;
-        font-weight: 700;
-        font-size: 0.85rem;
-        background-color: rgba($holiday-color, 0.1);
-        padding: 3px 8px;
-        border-radius: 4px;
-        margin-left: 12px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 180px;
+      margin-right: 10px;
+
+      &.today {
+        background-color: $today-color;
+        color: white;
+        border-radius: 50%;
       }
     }
-  
-    .day-body {
-      display: flex;
-      position: relative;
-  
-      .time-column {
-        min-width: 60px;
-        border-right: 1px solid $border-color;
-  
-        .hour-cell {
-          height: 4rem;
-          padding: 0.25rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.75rem;
-          color: $text-color;
-          border-bottom: 1px solid $border-color;
-        }
-      }
-  
-      .days-grid, .events-column {
-        flex: 1;
-        display: flex;
-        position: relative;
-      }
-  
-      .day-column {
-        flex: 1;
-        position: relative;
-        border-right: 1px solid $border-color;
-  
-        .hour-cell {
-          height: 4rem;
-          border-bottom: 1px solid $border-color;
-        }
-      }
-  
-      .events-column {
-        position: relative;
-        border-right: 1px solid $border-color;
-  
-        .hour-cell {
-          height: 4rem;
-          border-bottom: 1px solid $border-color;
-        }
-  
-        .no-events {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          color: rgba(60, 64, 67, 0.6);
-          font-style: italic;
-        }
-      }
-  
-      .event {
-        position: absolute;
-        border-radius: 4px;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-        color: $event-text-color;
-        overflow: hidden;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        height: 90%;
-  
-        .event-title {
-          font-weight: 700;
-          font-size: 14px;
-          margin-bottom: 0.25rem;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-  
-       
-        .event-type {
-          font-size: 11px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          color: #e5e5e5;
-        }
-      }
+    
+    .holiday-name {
+      color: $holiday-color;
+      font-weight: 700;
+      font-size: 0.85rem;
+      background-color: rgba($holiday-color, 0.1);
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-left: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
     }
   }
 
-  .day-view {
-    .day-body {
-      border-top: 1px solid #ddd;
-      
-      .time-column, .events-column {
-        .hour-cell {
-          position: relative;
-          
-          /* For better grid alignment */
-          &:after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            border-bottom: 1px solid #ddd;
-            z-index: 0;
-          }
-        }
+  .day-body {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 160px);
+    overflow-y: auto;
+    position: relative;
+    border-top: 1px solid #ddd;
+
+    .hour-row {
+      display: flex;
+      min-height: 60px;
+      border-bottom: 1px solid #eee;
+
+      &:nth-child(even) {
+        background-color: #fafafa;
       }
-      
-      /* Consistent grid appearance */
-      .events-column {
-        .hour-cell {
-          &:nth-child(odd) {
-            background-color: rgba(248, 249, 250, 0.5);
-          }
-          
-          &:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.8);
-          }
-        }
-      }
-      
-      /* Ensure events appear above grid lines */
-      .event-item {
-        position: relative;
-        z-index: 1;
+
+      &:nth-child(odd) {
+        background-color: #fff;
       }
     }
+
+    .time-cell {
+      width: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: #555;
+      border-right: 1px solid #ddd;
+    }
+
+    .events-container {
+      flex: 1;
+      position: relative;
+    }
+
+    .event-wrapper {
+      padding: 1px;
+      width: 10%;
+      box-sizing: border-box;
+    }
+
+    .event-content {
+      margin-right: 2px;
+      margin-left: 2px;
+      height: 100%;
+      width: 100%;
+    }
+
+    .event {
+      position: absolute;
+      border-radius: 4px;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      color: $event-text-color;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .event-content {
+        flex-grow: 1;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 6;
+        -webkit-box-orient: vertical;
+        line-clamp: 6;
+        box-orient: vertical;
+        text-overflow: ellipsis;
+      }
+
+      .event-title {
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 0.25rem;
+      }
+
+      .event-type {
+        font-size: 11px;
+        color: #e5e5e5;
+        margin-bottom: 2px;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .students-no {
+        position: absolute;
+        bottom: 4px;
+        right: 6px;
+        font-size: 11px;
+        color: #e5e5e5;
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 2px 6px;
+        border-radius: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100px;
+      }
+    }
+
+    .hour-cell {
+      position: relative;
+      
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        border-bottom: 1px solid #ddd;
+        z-index: 0;
+      }
+    }
+
+    .event-item {
+      position: relative;
+      z-index: 1;
+    }
   }
+}
