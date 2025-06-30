@@ -120,7 +120,7 @@ class ScrapperManager:
                 semester_1 = semester_starts.get(1)
                 semester_2 = semester_starts.get(2)
                 today = date.today()
-                today = date(2024, 9, 30)
+                # today = date(2024, 9, 30)
 
                 if semester_1 and today == semester_1:
                     self.logger.info(

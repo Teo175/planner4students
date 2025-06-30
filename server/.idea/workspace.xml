@@ -5,78 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="537c9a69-82c5-4e55-b247-485397ec562a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/api/endpoints.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/api/endpoints.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/api/server/apiService.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/api/server/apiService.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/common/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/common/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/common/texts.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/common/texts.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/eventDialog/eventDialog.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/eventDialog/eventDialog.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/eventDialog/eventDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/eventDialog/eventDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/header/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/header/header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/schedule/schedule.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/schedule/schedule.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/schedule/schedule.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/schedule/schedule.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/toolbar/toolbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/toolbar/toolbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/utils/dateUtils.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/utils/dateUtils.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/utils/eventItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/utils/eventItem.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/dayView/dayView.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/dayView/dayView.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/dayView/dayView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/dayView/dayView.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/mothView/monthView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/mothView/monthView.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/mothView/mothView.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/mothView/mothView.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/weekView/weekView.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/weekView/weekView.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/weekView/weekView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/dashboard/views/weekView/weekView.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/editProfile/editProfile.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/editProfile/editProfile.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/editProfile/editProfile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/editProfile/editProfile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/loginPage/loginPage.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/loginPage/loginPage.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/loginPage/loginPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/loginPage/loginPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/roomMaps/roomMaps.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/roomMaps/roomMaps.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/roomMaps/roomMaps.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/roomMaps/roomMaps.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/signupPage/signUpPage.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/signupPage/signUpPage.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/signupPage/signUpPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/signupPage/signUpPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/common/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/common/logger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/database_connection/db_connection.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/database_connection/db_connection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/docs/RoomsMaps.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/server/docs/RoomsMaps.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/column_names.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/column_names.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/professor.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/professor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/study_year.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/study_year.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/academic_holiday_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/academic_holiday_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/academic_schedule_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/academic_schedule_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/course_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/course_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/group_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/group_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/professor_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/professor_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/room_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/room_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/specialization_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/specialization_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/student_courses_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/student_courses_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/student_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/student_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/study_year_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/study_year_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/repositories/subgroup_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/repositories/subgroup_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/course_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/course_routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/group_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/group_routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/room_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/room_routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/schedule_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/schedule_routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/specialization_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/specialization_routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/student_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/student_routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/study_year_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/study_year_routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/subgroup_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/subgroup_routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/scraper/course_scrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/scraper/course_scrapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/scraper/professors_scrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/scraper/professors_scrapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/scraper/room_scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/scraper/room_scraper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/scraper/specializations_scrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/scraper/specializations_scrapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/scraper/structure_of_schedule_scrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/scraper/structure_of_schedule_scrapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/academic_schedule_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/academic_schedule_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/course_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/course_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/group_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/group_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/professor_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/professor_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/room_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/room_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/specialization_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/specialization_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/student_courses_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/student_courses_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/student_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/student_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/study_year_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/study_year_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/subgroup_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/subgroup_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/utils/handle_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/utils/handle_response.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/chatbot_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/chatbot_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/scraper/scrapper_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/scraper/scrapper_manager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +59,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "ts.external.directory.path": "C:\\Users\\peter\\AppData\\Local\\Programs\\PyCharm Professional\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
@@ -193,6 +124,10 @@
       <workItem from="1749632411942" duration="11278000" />
       <workItem from="1749712842546" duration="5683000" />
       <workItem from="1749813631202" duration="15724000" />
+      <workItem from="1750002947607" duration="1923000" />
+      <workItem from="1750524641637" duration="12000" />
+      <workItem from="1750618819914" duration="1000" />
+      <workItem from="1751303257210" duration="827000" />
     </task>
     <servers />
   </component>
@@ -217,11 +152,12 @@
     <SUITE FILE_PATH="coverage/server$user_routes.coverage" NAME="user_routes Coverage Results" MODIFIED="1736069130948" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/routes" />
     <SUITE FILE_PATH="coverage/server$user.coverage" NAME="user Coverage Results" MODIFIED="1736084731418" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/models" />
     <SUITE FILE_PATH="coverage/server$room.coverage" NAME="room Coverage Results" MODIFIED="1744558973905" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/models" />
+    <SUITE FILE_PATH="coverage/server$scrapper_manager.coverage" NAME="scrapper_manager Coverage Results" MODIFIED="1749999311956" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/scraper" />
     <SUITE FILE_PATH="coverage/server$user_service.coverage" NAME="user_service Coverage Results" MODIFIED="1736067989698" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/services" />
-    <SUITE FILE_PATH="coverage/server$run.coverage" NAME="run Coverage Results" MODIFIED="1749977706624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server" />
     <SUITE FILE_PATH="coverage/server$init.coverage" NAME="init Coverage Results" MODIFIED="1736072781576" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server" />
-    <SUITE FILE_PATH="coverage/server$course_repository.coverage" NAME="course_repository Coverage Results" MODIFIED="1747585799875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/repositories" />
     <SUITE FILE_PATH="coverage/server$Flask.coverage" NAME="Flask Coverage Results" MODIFIED="1747815379694" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/server$run.coverage" NAME="run Coverage Results" MODIFIED="1751303904141" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server" />
+    <SUITE FILE_PATH="coverage/server$course_repository.coverage" NAME="course_repository Coverage Results" MODIFIED="1747585799875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/repositories" />
     <SUITE FILE_PATH="coverage/server$handle_response.coverage" NAME="handle_response Coverage Results" MODIFIED="1736082407841" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server/api/utils" />
   </component>
 </project>

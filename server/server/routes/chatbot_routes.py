@@ -46,7 +46,7 @@ def register_routes_chatbot(app, Session):
             professors_text = "\n".join(formatted_professors)
 
             prompt = f"""
-Esti un asistent care ajuta studentii sa isi aleaga coordonatorul pentru lucrarea de licenta.
+Esti un asistent care ajuta studentii sa isi aleaga coordonatorul pentru lucrarea de licenta.Cand primesti lista de profesori si mesajul studentului raspunde **exclusiv** cu 2-3 nume de profesori recomandati si o justificare foarte scurta (1 propozitie).
 Lista profesorilor este in formatul: Nume | Domenii | Materii.
 
 Profesori disponibili:
@@ -55,7 +55,6 @@ Profesori disponibili:
 Mesajul studentului:
 "{user_message}"
 
-Recomanda cel mai potrivit profesor si justifica alegerea.
 """
 
             headers = {
