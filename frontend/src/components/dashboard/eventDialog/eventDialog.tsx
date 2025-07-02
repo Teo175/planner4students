@@ -3,7 +3,7 @@ import './eventDialog.scss';
 import DayView from '../views/dayView/dayView';
 import { EventDialogProps } from '../../../common';
 
-
+//extended component for mothview
 const EventDialog: React.FC<EventDialogProps> = ({ isOpen, onClose, date, courses, academicSchedule }) => {
   if (!isOpen || !date) return null;
 

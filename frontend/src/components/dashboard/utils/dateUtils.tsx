@@ -340,7 +340,7 @@ export const getEventsForDate = (date: Date, events: EventData[], academicSchedu
   }
 };
 
-// Main function for converting Course[] to EventData[] - FIXED
+// Main function for converting Course[] to EventData[]
 export const formatCoursesToEvents = (coursesData: Course[]): EventData[] => {
   if (!coursesData || !Array.isArray(coursesData)) return [];
   

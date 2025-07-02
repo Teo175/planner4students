@@ -471,7 +471,7 @@ const performSave = async () => {
         apiService.updateUserProfile({
           first_name: response.data.user.first_name || userData.first_name,
           last_name: response.data.user.last_name || userData.last_name,
-          subgroup_id: response.data.user.subgroup_id || selectedSubgroupId, // FIXED: Keep as string
+          subgroup_id: response.data.user.subgroup_id || selectedSubgroupId, 
           email: response.data.user.email || userData.email,
           student_id: response.data.user.student_id || userData.student_id
         });
@@ -479,7 +479,7 @@ const performSave = async () => {
         apiService.updateUserProfile({
           first_name: userData.first_name,
           last_name: userData.last_name,
-          subgroup_id: selectedSubgroupId, // FIXED: Keep as string
+          subgroup_id: selectedSubgroupId, 
           email: userData.email,
           student_id: userData.student_id
         });

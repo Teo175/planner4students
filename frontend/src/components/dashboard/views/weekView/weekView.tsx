@@ -85,10 +85,11 @@ const WeekView: React.FC<WeekViewProps> = ({
               const allDayEvents: EventData[] = [...dayEvents, ...possibleDayEvents];
               
               const arrangedEvents: EventData[] = arrangeOverlappingEvents(allDayEvents);
-              
+             // console.log(arrangedEvents);
               const hourEvents: EventData[] = arrangedEvents.filter((event: EventData) => 
                 event.startHour === hour
               );
+              console.log(hourEvents);
               
               return (
                 <div key={dateIndex} className={`day-cell ${holidayInfo ? 'holiday-cell' : ''}`}>

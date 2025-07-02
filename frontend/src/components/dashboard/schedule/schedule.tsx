@@ -48,8 +48,8 @@ const Schedule = () => {
     if (!academicData || !academicData.academic_periods) return;
 
     const today = new Date();
-   // const todayStr = today.toISOString().split('T')[0]; 
-    const todayStr = '2024-09-30';
+    const todayStr = today.toISOString().split('T')[0]; 
+    //const todayStr = '2025-02-24';
     
     const allStartDates = academicData.academic_periods
       .map(period => period.start_date)
@@ -59,7 +59,6 @@ const Schedule = () => {
       ? allStartDates.reduce((earliest, current) => current < earliest ? current : earliest)
       : null;
 
-  
     if (earliestDate && todayStr === earliestDate) {
       const warningKey = `semester_warning_${todayStr}`;
       const hasShownWarning = localStorage.getItem(warningKey);
